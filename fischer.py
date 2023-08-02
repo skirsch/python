@@ -7,8 +7,8 @@ from scipy.stats.contingency import odds_ratio
 # ORDER is no treat/ok, treatment/ok,   noT/bad, T/bad,
 
 # this gives a statistic of 10 since odds of damage is 10X greater with the vax
-print(scipy.stats.fisher_exact([[10, 100], [1, 100]]))   # two-sided p-value .01  odds ratio is 10X
-print(scipy.stats.fisher_exact([[10, 100], [1, 100]], 'greater'))  # one-sided p-value if hypothesis of harm only
+# print(scipy.stats.fisher_exact([[10, 100], [1, 100]]))   # two-sided p-value .01  odds ratio is 10X
+# print(scipy.stats.fisher_exact([[10, 100], [1, 100]], 'greater'))  # one-sided p-value if hypothesis of harm only
 
 def analyze(a,b,c,d, description):
     print("\nStatistics for", description, a,b,c,d)
