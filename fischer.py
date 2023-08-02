@@ -22,5 +22,4 @@ analyze(50,143,0,7, "wayne root deaths")
 analyze(50,117,0,33, "wayne root injuries")
 analyze(50, 750, 0, 250, "podiatrist")
 analyze(1875, 5605,0, 20, "jay bonnar injuries" )
-analyze(1875, 5610,0, 15, "jay bonnar deaths" ) 
-
+analyze(1875, 5610,0, 15, "jay bonnar deaths" )
