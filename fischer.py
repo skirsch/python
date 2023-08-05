@@ -16,7 +16,7 @@ def analyze(a,b,c,d, description):
     print("One-sided pvalue", res.pvalue)
     res=odds_ratio([[a,b],[c,d]])
     print("Odds ratio=", res.statistic)
-    print(res.confidence_interval(confidence_level=0.95))
+    print(res.confidence_interval(confidence_level=0.95))  # 95% confidence interval
 
 analyze(50,143,0,7, "wayne root deaths")
 analyze(50,117,0,33, "wayne root injuries")
