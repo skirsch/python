@@ -28,7 +28,7 @@ from scipy.stats import poisson
 def p(k,l):
     return poisson.pmf(k,l)    # this works always. point value.
     # use .cdf to get <= to a value
-    # we want inverse so use sdf which is computed inverse of cdf
+    # the ccdf (complementary cdf) aka suvival function (scumf) is 1 - cdf
     # return (math.exp(-l)*(l**k))/math.factorial(k)
 
 # test for n or fewer events if expect 1 event, so should be nearly one
@@ -51,7 +51,8 @@ def test(n):
 # jay saw 4 people die from the vaccine
 # jay saw 14000 shots in his friends. So he should see 14000/1M deaths. He saw 4
 # cum(4, .014) which is 1.5e-9
-# I think there is a 1 in 1000 kill rate, so jay saw 15, and expected 14.... prob is about 42%c
+# I think there is a 1 in 1000 kill rate, so jay saw 15, and expected 14.... 
+# SIDS >>> cum(225, 10) returns 3.771860150422966e-213
 def cum_old(n,m, num_extra=10):
     sum=0
     for a in range(n,n+num_extra+1):  # stops at n events
@@ -59,7 +60,9 @@ def cum_old(n,m, num_extra=10):
         print(a, prob, sum)
         sum+=prob
     print(sum)
+
 # chance of >=N events given expected m events
 def cum(n,m):
-    answer=poisson.sf(n,m)+poisson.pmf(n,m)
+    # answer=poisson.sf(n,m)+poisson.pmf(n,m)   # one way to do it
+    answer=poisson.sf(n-1,m)                    # the way more clever way to do it
     print(answer)
