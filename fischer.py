@@ -13,7 +13,7 @@ from scipy.stats.contingency import odds_ratio
 def analyze(a,b,c,d, description):
     print("\nStatistics for", description, a,b,c,d)
     res=(fisher_exact([[a,b],[c,d]],'greater')) # one-sided p-value
-    print("One-sided pvalue", res.pvalue)
+    print("One-sided p-value", res.pvalue)
     res=odds_ratio([[a,b],[c,d]])
     print("Odds ratio=", res.statistic)
     print(res.confidence_interval(confidence_level=0.95))  # 95% confidence interval
@@ -26,3 +26,5 @@ analyze(1875, 5610,0, 15, "jay bonnar deaths" )
 analyze(999999, 561000,1, 15, "jay bonnar deaths with 750,000 friends vs. CDC rate" ) 
 analyze(999999, 14000,1, 15, "jay bonnar deaths per dose vs. FDA claims")
 analyze(999999, 140000,1, 15, "jay bonnar deaths per dose vs. FDA claims assuming he has 75K friends")
+analyze(999999, 14000,1, 4, "jay bonnar same-day deaths per dose vs. FDA claims")
+analyze(999999, 100,1, 3, "my genesis story: 3 relatives who died post jab")
