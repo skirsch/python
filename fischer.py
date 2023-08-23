@@ -4,7 +4,9 @@ from scipy.stats import fisher_exact
 from scipy.stats.contingency import odds_ratio
 
 # say vaccine is making things worse with more deaths
-# ORDER is no treat/ok, treatment/ok,   noT/bad, T/bad,
+# argument ORDER is no treat/ok, treatment/ok,   noT/bad, T/bad,
+# so the OK people first, then the # of injured
+
 
 # this gives a statistic of 10 since odds of damage is 10X greater with the vax
 # print(scipy.stats.fisher_exact([[10, 100], [1, 100]]))   # two-sided p-value .01  odds ratio is 10X
@@ -28,3 +30,5 @@ analyze(999999, 14000,1, 15, "jay bonnar deaths per dose vs. FDA claims")
 analyze(999999, 140000,1, 15, "jay bonnar deaths per dose vs. FDA claims assuming he has 75K friends")
 analyze(999999, 14000,1, 4, "jay bonnar same-day deaths per dose vs. FDA claims")
 analyze(999999, 100,1, 3, "my genesis story: 3 relatives who died post jab")
+
+analyze(511163, 90467, 21952, 6117, "IFR")
