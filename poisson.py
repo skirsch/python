@@ -66,3 +66,4 @@ def cum(n,m):
     # answer=poisson.sf(n,m)+poisson.pmf(n,m)   # one way to do it
     answer=poisson.sf(n-1,m)                    # the way more clever way to do it
     print(answer)
+    return(answer)
