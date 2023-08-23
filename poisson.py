@@ -56,6 +56,11 @@ def test(n):
 # cum(4, .014) which is 1.5e-9
 # I think there is a 1 in 1000 kill rate, so jay saw 15, and expected 14.... 
 # SIDS >>> cum(225, 10) returns 3.771860150422966e-213
+# SIDS is 50% of 100 cases investigated happened within 48 hours of vaccine
+# sweet spot of death was 6 months
+# want age at death, days after vaccine for every case when asked for 100 cases
+# if kids vaccinated every 60 days, chance of this happening is 1/30 so for 90 cases, expect 3, but get 45
+# which is 1e-36. If 2x as many cases, it is 1e-71
 def cum_old(n,m, num_extra=10):
     sum=0
     for a in range(n,n+num_extra+1):  # stops at n events
