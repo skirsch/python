@@ -46,6 +46,9 @@ def test(n):
 # 3 years is 1,000 days. So in a given day, a child has a 1 in 35,000 chance of getting autism. 
 # but a family of 3 would have a 1/10000 chance of having an autistic child on a given day
 # so cum(3,.0001)
+# if kids get autism only over a 1 year window, use cum(3, 3/(365*35)) because you have 3 kids
+# so 2e-12, but there are only 1e8 households in America
+
 # USC is cum(2, .01) which is about 1 in million probability that two once per 100 years happens 
 
 # jay saw 4 people die from the vaccine
