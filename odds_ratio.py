@@ -35,7 +35,9 @@ def odds(a,b,c,d):
     print("Odds Ratio:", odds_ratio)
     print("Confidence Interval:", confidence_interval)
     print("Z-Score:", z_score)
-    print("P-Value from Fisher test:", p_value)
+    print("Exact P-Value from Fisher test:", p_value)
+    # note that the p-value estimated from the Z-score will be LESS accurate
+    # because it assumes a normal distribution
 
 # use odds2 if have TOTAL count unvaxxed, TOTAL count vaxxed, unvaxxed dead, vaxxed dead
 
