@@ -57,3 +57,7 @@ P-Value: 0.009658115943518335
 Except p-value from Z-score for two-tailed is .0235 and is .011772
 for one-tailed
 """
+
+odds(26525-4808, 2077-621, 4808, 621) #  "Nursing home 12/6 vs. 2/28 with one week offset")
+# now look at nursing homes getting worse vs. better
+odds( )
