@@ -69,9 +69,21 @@ def cum_old(n,m, num_extra=10):
         sum+=prob
     print(sum)
 
-# chance of >=N events given expected m events
+# chance of >=n events given expected m events
+# Note that for a given n,m, poisson.cdf + poisson.sf =1
+# The cdf includes 0 to n events
+# Note that its more likely you'll get 10X fewer events than expected
+# than 10X more events than expected due to shape of the curve
+# so if a study finds vaxxed and unvaxxed got same amount of deaths
+# that is very unlikely
 def cum(n,m):
     # answer=poisson.sf(n,m)+poisson.pmf(n,m)   # one way to do it
     answer=poisson.sf(n-1,m)                    # the way more clever way to do it
     print(answer)
     return(answer)
+
+# Jennifer chubb is 250 cases, 50% happened within 48 hours. But 1/15 should have happened
+# within 48 hours. Expected 16.6, but got 125. cum(125,16.6) is 1.2e-64 and 86.4%
+# of SIDS deaths were caused by the vaccine
+
+# use shift-enter to run code (control-enter in R)
