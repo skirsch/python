@@ -42,5 +42,30 @@ analyze(729, 234, 10, 4, "VHA boosted/unboosted death from COVID")
 
 # US Nursing home data before/after rollout
 # Note this is so large that it won't compute a probab
-analyze1(188203, 204890, 31150, 35590, "Nursing home 12 week case")
-analyze1(18820, 20489, 3115, 3559, "Nursing home 12 week case") # faster to compute confidence
+
+#actual value is first one, but this is time consuming to compute
+# analyze1(188203, 204890, 31150, 35590, "Nursing home 12 week case") 
+# analyze1(18820, 20489, 3115, 3559, "Nursing home 12 week case") # faster to compute confidence
+
+# JAMA paper on nursing homes
+# https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2799266
+# System 2 included 128 VHA CLCs; among 
+# 3289 boosted residents (3157 [96.0%] male; 1950 [59.3%] White) vs 
+# 4317 unboosted residents 
+# (4151 [96.2%] male; 2434 [56.4%] White), the median age was 74 (IQR, 70-80) vs 74 (IQR, 69-80) years. 
+# A total of 45 SARS-CoV-2–associated deaths occurred in system 1 and 18 deaths occurred in system 2. 
+# Per table:
+# boosted deaths were 1.3*3.289=4.3
+# unboosted deaths were 2.4*4.317=10.4
+# from the chart, we have boosted deaths per 1K are 98/158*2 (1.24) 
+# and unboosted deaths are 28/158*2+2 = 2.3 which are close to the Table values
+# so just go with the table values for now.
+# shows a benefit based on population
+analyze1(4317, 3289, 10, 4, "jama paper unbboosted v boosted deaths based on number of participants")
+# but now lets look at based on # of infections
+analyze1(int(4.317*171.2), int(3.289*72.5), 10, 4, "jama paper unbboosted v boosted deaths based on number of infections")
+# if just look at the numbers in the table (per 1K), get:
+# 
+# (Table 3) says that there was a CFR for the System 2 unboosted of  2.4/171.2=.014 per 1K residents. 
+# But for the boosted, the case fatality rate was higher at 1.3/72.5=.0179. 
+# So it was 28% higher CFR for the boosted. cum
