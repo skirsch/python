@@ -62,6 +62,10 @@ for one-tailed
 """
 
 odds(26525-4808, 2077-621, 4808, 621) #  "Nursing home 12/6 vs. 2/28 with one week offset")
+# now look at nursing homes getting worse vs. better
+odds2(7500, 7500, 169, 1126) # nursing home 2X effect or more
+
+odds(27,62, 0, 28)    # odds ratio for AVV 28,0   90, 28
 
 # ECH covid hospitalization vs. fatality
 # note that manual OR will only equal if all integers
