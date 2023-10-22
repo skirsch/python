@@ -27,7 +27,8 @@ d = 621     # dead vaxxed (exposed; bad outcome)
 a = 30894-c    # alive unvax = total unvaxxed - dead
 b = 1567-d    # alive vaxxed = total vaxxed participants - dead
 
-# use this function if give as good(control), good(experiment), dead(control), dead(experiment)
+# use this function if give as 
+# good(control), good(experiment), dead(control), dead(experiment)
 # where good means a favorable outcome, e.g., healthy, e.g., got 0 covid infections
 def odds(a,b,c,d):
     odds_ratio, confidence_interval, z_score, p_value = calculate_odds_ratio_ci_z_p(a, b, c, d)
@@ -42,6 +43,8 @@ def odds(a,b,c,d):
 # use odds2 if have TOTAL count unvaxxed, TOTAL count vaxxed, unvaxxed dead, vaxxed dead
 
 def odds2(a,b,c,d):
+    print("odds before", c/(a-c))
+    print("odds after", d/(b-d))
     odds(a-c, b-d, c,d)
 
 odds(a,b,c,d)
@@ -59,5 +62,19 @@ for one-tailed
 """
 
 odds(26525-4808, 2077-621, 4808, 621) #  "Nursing home 12/6 vs. 2/28 with one week offset")
-# now look at nursing homes getting worse vs. better
-odds( )
+
+# ECH covid hospitalization vs. fatality
+# note that manual OR will only equal if all integers
+odds2(265,663,10,40)
+
+
+# JAMA propensity numbers
+# for COVID vaccine
+# unboosted flu, unboosted COVID, boosted flu, boosted covid, 
+odds2(2403, 8996, 1332,4906)
+odds2(2403, 8996, 1318, 4906)
+
+# for the flu vaccine
+# total covid, total flu, got vax covid, got vax flu
+odds2(8996, 2403, 5743, 1524)
+

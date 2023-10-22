@@ -78,12 +78,20 @@ def cum_old(n,m, num_extra=10):
 # that is very unlikely
 def cum(n,m):
     # answer=poisson.sf(n,m)+poisson.pmf(n,m)   # one way to do it
-    answer=poisson.sf(n-1,m)                    # the way more clever way to do it
-    print(answer)
-    return(answer)
+    return(poisson.sf(n-1,m))                    # the way more clever way to do it
 
 # Jennifer chubb is 250 cases, 50% happened within 48 hours. But 1/15 should have happened
 # within 48 hours. Expected 16.6, but got 125. cum(125,16.6) is 1.2e-64 and 86.4%
 # of SIDS deaths were caused by the vaccine
 
 # use shift-enter to run code (control-enter in R)
+
+# cum is good if observed a lot of deaths and expected a few
+# but there are also cases where you should have seen 100 execess deaths and got 1 or zero
+# that is the pdf. E.g., cdf(1, 100) for chance of seeing 1 or fewer deaths
+# when expecting 100.
+
+# chance of seeing n or fewer events when expecting m events
+def cdf(n,m):
+    return(poisson.cdf(n,m))
+# note that cdf(1,10) + cum(2,10) =1
