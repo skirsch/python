@@ -82,3 +82,6 @@ odds2(2403, 8996, 1318, 4906)
 # total covid, total flu, got vax covid, got vax flu
 odds2(8996, 2403, 5743, 1524)
 
+# for my survey (extended family)
+odds2(34270, 34270, 201, 483)
+odds2(4000,4000,27, 36)
