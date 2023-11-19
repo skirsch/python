@@ -13,7 +13,7 @@ from scipy.stats.contingency import odds_ratio
 # print(scipy.stats.fisher_exact([[10, 100], [1, 100]], 'greater'))  # one-sided p-value if hypothesis of harm only
 
 def analyze(a,b,c,d, description):
-    print("\nStatistics for", description, a,b,c,d)
+    print("\nStatistics for", description, a,b,c,d, a+b+c+d)
     res=(fisher_exact([[a,b],[c,d]],'greater')) # one-sided p-value
     print("One-sided p-value", res.pvalue)
     res=odds_ratio([[a,b],[c,d]])
@@ -68,4 +68,7 @@ analyze1(int(4.317*171.2), int(3.289*72.5), 10, 4, "jama paper unbboosted v boos
 # 
 # (Table 3) says that there was a CFR for the System 2 unboosted of  2.4/171.2=.014 per 1K residents. 
 # But for the boosted, the case fatality rate was higher at 1.3/72.5=.0179. 
-# So it was 28% higher CFR for the boosted. cum
+# So it was 28% higher CFR for the boosted. 
+
+# Died suddenly stats
+analyze(22,  71-22, 95-22, (506-95)-(71-22), "died normally unvax vs. vax")
