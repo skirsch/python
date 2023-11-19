@@ -15,7 +15,9 @@ from scipy.stats.contingency import odds_ratio
 def analyze(a,b,c,d, description):
     print("\nStatistics for", description, a,b,c,d, a+b+c+d)
     res=(fisher_exact([[a,b],[c,d]],'greater')) # one-sided p-value
-    print("One-sided p-value", res.pvalue)
+    print("One-sided p-value", res.pvalue)  # probability of seeing at least this many events, given expected of a:c
+    res2=(fisher_exact([[a,b],[c,d]],'two-sided')) # one-sided p-value
+    print("Two-sided p-value", res2.value)  # probability this is DIFFERENT than control
     res=odds_ratio([[a,b],[c,d]])
     print("Odds ratio=", res.statistic)
     print(res.confidence_interval(confidence_level=0.95))  # 95% confidence interval
@@ -72,3 +74,15 @@ analyze1(int(4.317*171.2), int(3.289*72.5), 10, 4, "jama paper unbboosted v boos
 
 # Died suddenly stats
 analyze(22,  71-22, 95-22, (506-95)-(71-22), "died normally unvax vs. vax")
+
+# BEWARE OF the ONE-SIDED p-value!
+# the order of arguments matters (unlike the two sided p-value)
+# analyze(100, 100, 1, 10, "80 year olds")
+# is your chance of seeing 10 or more events given you expect 1
+
+# analyze(100, 100, 10, 1, "80 year olds")
+# is the chance you'll 1 or more events, given you expect to see 
+# 10 events (the control). This is almost certain to happen!
+# so for one-sided test.
+
+# so only use one-sided test when your experiment has MORE death rate than the control.
