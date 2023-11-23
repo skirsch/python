@@ -13,7 +13,7 @@ from scipy.stats.contingency import odds_ratio
 # 10 events (the control). This is almost certain to happen!
 
 # so only use one-sided test when your experiment has HIGHER death rate than the control.
-# (because the criteria was "GREATER" in our one-sided test)
+# (because the criteria was "GREATER" in our one-sided testcum)
 
 # say vaccine is making things worse with more deaths
 # argument ORDER is no treat/ok, treatment/ok,   noT/bad, T/bad,
