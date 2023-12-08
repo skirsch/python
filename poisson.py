@@ -25,6 +25,8 @@ essentially 0
 import math
 from scipy.stats import poisson
 # chance of getting exactly k events when expect l events
+
+# poisson.cdf(0,15) means you got 0 or less events and expected 15
 def p(k,l):
     return poisson.pmf(k,l)    # this works always. point value.
     # use .cdf to get <= to a value
