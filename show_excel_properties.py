@@ -9,7 +9,7 @@ def get_file_metadata(filename):
     filename: The path to the Excel xlsx file.
   """
   try:
-    wb = load_workbook(filename)
+    wb = openpyxl.load_workbook(filename)
     properties = wb.properties
 
     if "creator" in properties:
