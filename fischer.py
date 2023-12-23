@@ -25,7 +25,7 @@ from scipy.stats.contingency import odds_ratio
 # print(scipy.stats.fisher_exact([[10, 100], [1, 100]], 'greater'))  # one-sided p-value if hypothesis of harm only
 
 def analyze(a,b,c,d, description):
-    print("\nStatistics for", description, a,b,c,d, a+b+c+d)
+    print("\nStatistics for", description, "=", a,b,c,d, a+b+c+d)
     res=(fisher_exact([[a,b],[c,d]],'greater')) # one-sided p-value
     print("One-sided p-value", res.pvalue)  # probability of seeing at least this many events, given expected of a:c
     res2=(fisher_exact([[a,b],[c,d]],'two-sided')) # one-sided p-value
@@ -102,3 +102,5 @@ analyze(507, 454, 377, 281, "gender ratio test")
 # put dose 2 or 1 first
 analyze(698,969, 420,697, "gender ratio of 40 to 77 dose 2 vs. 3")
 analyze(597,969, 355,697, "gender ratio of 40 to 77 dose 1 vs. 3")
+analyze(386, 2435,221, 1662, "gender ratio first 120 days vs. after 120 days dose 1")
+analyze(3972,   919, 2691, 907, "dose 4")

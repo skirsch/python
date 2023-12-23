@@ -1,4 +1,5 @@
 '''
+from norman fenton
 It's a very different way of looking at the problem 
 because you are equating death of a vaxxed person 
 as an unexpected death. But if the answer to your 
@@ -12,6 +13,8 @@ The result is essentially 0 but strictly
 speaking we want to know P(X >=k) but that is also 
 essentially 0
 '''
+
+# Survival function (also defined as 1 - cdf, but sf is sometimes more accurate).
 
 # reference manual here: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.poisson.html
 # chance of getting K events where you expect l chance 
