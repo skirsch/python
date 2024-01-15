@@ -85,7 +85,29 @@ count = df[df['MRN'] > 2].shape[0]  # Combine filtering and counting in one step
 # calculate the average MRN for each provider by using groupby. Can use this for histograms as well.
 # so can groupby and then do a count
 grouped_df=df.groupby('provider')   # returns a groupedby object!!!
+# so here we can find the avg number of people who died by provider
 average_mrn_df = grouped_df['died'].mean().reset_index()   # get mean, sum, count, std, max, min, etc.
+
+# multiple field groups
+
+grouped_data = df.groupby(["provider", "age"])
+counts = grouped_data.size()   # counts is a series, so counts[3] will give the number of records for provider 3
+# if using multiple groupby, then series has two indices, e.g., counts[2,3] will give number of records
+# where provider is 2 and age is 3. 
+
+print(counts)   # count records for each group
+
+means = grouped_data["revenue"].mean()
+print(means)
+
+def custom_function(group):
+    # Do something with the group
+    return result
+
+results = grouped_data.apply(custom_function)
+print(results)
+
+
 
 # subset a dataframe
 # can use df.head(3) or df.tail(3) to get the first 3 or last 3 rows
