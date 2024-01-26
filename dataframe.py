@@ -102,6 +102,8 @@ print(means)
 
 def custom_function(group):
     # Do something with the group
+    result=group.size()
+    # ....
     return result
 
 results = grouped_data.apply(custom_function)
