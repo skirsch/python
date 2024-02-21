@@ -18,6 +18,7 @@ from scipy.stats.contingency import odds_ratio
 # say vaccine is making things worse with more deaths
 # argument ORDER is no treat/ok, treatment/ok,   noT/bad, T/bad,
 # so the OK people first, then the # of injured
+# start with NO TREAT
 
 
 # this gives a statistic of 10 since odds of damage is 10X greater with the vax
@@ -105,3 +106,5 @@ analyze(597,969, 355,697, "gender ratio of 40 to 77 dose 1 vs. 3")
 analyze(386, 2435,221, 1662, "gender ratio first 120 days vs. after 120 days dose 1")
 analyze(3972,   919, 2691, 907, "dose 4")
 analyze(6270, 263,  6699, 397, "aug sept 2021 injection vs. 1 year later NZ")
+# compute for NZ OIA request
+analyze(94,1662, 103, 1992, "NZ OIA month before peak COVID vs. month of peak COVID")
