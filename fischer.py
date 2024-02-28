@@ -9,7 +9,7 @@ from scipy.stats.contingency import odds_ratio
 # is your chance of seeing 10 or more events given you expect 1 (rare)
 
 # analyze(100, 100, 10, 1, "80 year olds")
-# is the chance you'll 1 or more events, given you expect to see 
+# is the chance you'll see 1 or more events, given you expect to see 
 # 10 events (the control). This is almost certain to happen!
 
 # so only use one-sided test when your experiment has HIGHER death rate than the control.
@@ -18,6 +18,7 @@ from scipy.stats.contingency import odds_ratio
 # say vaccine is making things worse with more deaths
 # argument ORDER is no treat/ok, treatment/ok,   noT/bad, T/bad,
 # so the OK people first, then the # of injured
+# start with NO TREAT
 
 
 # this gives a statistic of 10 since odds of damage is 10X greater with the vax
@@ -25,7 +26,7 @@ from scipy.stats.contingency import odds_ratio
 # print(scipy.stats.fisher_exact([[10, 100], [1, 100]], 'greater'))  # one-sided p-value if hypothesis of harm only
 
 def analyze(a,b,c,d, description):
-    print("\nStatistics for", description, a,b,c,d, a+b+c+d)
+    print("\nStatistics for", description, "=", a,b,c,d, a+b+c+d)
     res=(fisher_exact([[a,b],[c,d]],'greater')) # one-sided p-value
     print("One-sided p-value", res.pvalue)  # probability of seeing at least this many events, given expected of a:c
     res2=(fisher_exact([[a,b],[c,d]],'two-sided')) # one-sided p-value
@@ -87,3 +88,23 @@ analyze1(int(4.317*171.2), int(3.289*72.5), 10, 4, "jama paper unbboosted v boos
 # Died suddenly stats
 analyze(22,  71-22, 95-22, (506-95)-(71-22), "died normally unvax vs. vax")
 
+# Gender ratio for different doses
+# control is dose 3
+# ages 36 to 70 where m:f stats are constant
+# 0 to 180 days post dose
+# dose 3: 507,377 male:female
+# dose 2: 454, 281
+analyze(507, 454, 377, 281, "gender ratio test")
+
+# for 40 to 77
+# dose 3: 968, 697
+# dose 2: 698, 420
+# dose 1: 597, 355
+# put dose 2 or 1 first
+analyze(698,969, 420,697, "gender ratio of 40 to 77 dose 2 vs. 3")
+analyze(597,969, 355,697, "gender ratio of 40 to 77 dose 1 vs. 3")
+analyze(386, 2435,221, 1662, "gender ratio first 120 days vs. after 120 days dose 1")
+analyze(3972,   919, 2691, 907, "dose 4")
+analyze(6270, 263,  6699, 397, "aug sept 2021 injection vs. 1 year later NZ")
+# compute for NZ OIA request
+analyze(94,1662, 103, 1992, "NZ OIA month before peak COVID vs. month of peak COVID")
