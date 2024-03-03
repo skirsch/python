@@ -2,6 +2,12 @@
 # https://coinbase.github.io/coinbase-advanced-py/
 # OVerview: https://docs.cloud.coinbase.com/advanced-trade-api/docs/rest-api-cfm
 # actual calls are in the API Reference tab
+
+# I set the environment variables in my windows environment to my API keys as specified by Coinbase.
+# Be sure to make it so your API keys are locked to your machine and that they cannot be used for withdraws, only trading
+# Here are what my env variables look like:
+# COINBASE_API_KEY=organizations/c9391bba-6513-42f4-891e-1faceb8aef4/apiKeys/1b8222a6-d8cf-4b47-ab18-66afd77892abcdd1
+# COINBASE_API_SECRET=-----BEGIN EC PRIVATE KEY-----\nMEEIN356AQcoW__no_imnotshowingyouWthekeythatiuseanditSM49\nAwEHo_wouldntworkifidid__alotsmorecharactersJA==\n-----END EC PRIVATE KEY-----\n
 from time import time, sleep, ctime
 import sys
 from coinbase.rest import RESTClient
@@ -63,4 +69,7 @@ def twap(total_USD_amt, trade_side,  pairs, num_hours, granularity=100, start=0)
 
 # buy $280K total over 6 hours with 24 trade granularity for $ amount 
 # every 15 minutes        
-twap(40000, BUY, ('BTC-USDC', 'ETH-USDC'), 6, 50)
+# twap(40000, BUY, ('BTC-USDC', 'ETH-USDC'), 6, 50)
+        
+# if buying just a single crypto, don't forget the , or you'll be sorry!
+twap(60000, BUY, ('BTC-USDC',), 12, 100)        
