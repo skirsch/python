@@ -73,3 +73,8 @@ def twap(total_USD_amt, trade_side,  pairs, num_hours, granularity=100, start=0)
         
 # if buying just a single crypto, don't forget the , or you'll be sorry!
 twap(60000, BUY, ('BTC-USDC',), 12, 100)        
+
+# I have a .bat file which simply has 
+# python <path to my script>
+
+# then I just double click the bat file to initiate the transaction
