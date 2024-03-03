@@ -1,13 +1,35 @@
+'''
+simple steps
+
+1. Generate trading API keys from Coinbase in their API section. Make sure they are locked to your IP (use your full external IPv4 addresss)
+2. Add the keys into your environment variables on your windows box (type "environment" into the search box and you'll get the window to do this)
+
+COINBASE_API_KEY=organizations/c9391bba-6513-42f4-891e-1faceb8aef4/apiKeys/1b8222a6-d8cf-4b47-ab18-66afd77892abcdd1
+COINBASE_API_SECRET=-----BEGIN EC PRIVATE KEY-----\nMEEIN356AQcoW__no_imnotshowingyouWthekeythatiuseanditSM49\nAwEHo_wouldntworkifidid__alotsmorecharactersJA==\n-----END EC PRIVATE KEY-----\n
+
+3. edit the last line of the script below with how much you want to buy, which pairs, over how many hours, and the granularity
+
+4. write a .bat script with one line:
+python <path to the script>
+
+5. Just double click the script to kick things off
+
+
+'''
+
+
+
+
 # https://github.com/coinbase/coinbase-advanced-py?tab=readme-ov-file
 # https://coinbase.github.io/coinbase-advanced-py/
 # OVerview: https://docs.cloud.coinbase.com/advanced-trade-api/docs/rest-api-cfm
 # actual calls are in the API Reference tab
 
+
 # I set the environment variables in my windows environment to my API keys as specified by Coinbase.
 # Be sure to make it so your API keys are locked to your machine and that they cannot be used for withdraws, only trading
 # Here are what my env variables look like:
-# COINBASE_API_KEY=organizations/c9391bba-6513-42f4-891e-1faceb8aef4/apiKeys/1b8222a6-d8cf-4b47-ab18-66afd77892abcdd1
-# COINBASE_API_SECRET=-----BEGIN EC PRIVATE KEY-----\nMEEIN356AQcoW__no_imnotshowingyouWthekeythatiuseanditSM49\nAwEHo_wouldntworkifidid__alotsmorecharactersJA==\n-----END EC PRIVATE KEY-----\n
+# 
 from time import time, sleep, ctime
 import sys
 from coinbase.rest import RESTClient
