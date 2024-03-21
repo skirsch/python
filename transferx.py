@@ -40,4 +40,8 @@ transaction history
 public key so I can prove my identity
 provider name, e.g., server to contact in order to contact that user
 asset types and addresses held in the system (addresses stored here are all derived from the seed that is kept in user's app)
+reputation
+date joined
+picture
+user's name, e.g., Steve Kirsch
 '''
