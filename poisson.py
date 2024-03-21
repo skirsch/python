@@ -11,7 +11,7 @@ the formula is this where e is the constant
 lambda is 0.05 and k=15. 
 The result is essentially 0 but strictly 
 speaking we want to know P(X >=k) but that is also 
-essentially 0
+essentially 0
 '''
 
 # Survival function (also defined as 1 - cdf, but sf is sometimes more accurate).
