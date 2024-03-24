@@ -24,11 +24,16 @@ steve.get_prop("home") # get whole home address tree
 steve.send("yobie", 5, USD, "thanks for the memories.")
 steve.request("yobie", 5, USD, "you owe me from last thursday")
 
-txn=steve.listen_for_transactions()      # will block until a new txn is posted. Some will be pull requests. 
+txn=steve.get_transaction()      # will block until a new txn is posted that happened after the call. Some will be pull requests. 
 # The app can approve pull requests if pre-authorized in the app. 
 # Generally, pre-authorized approvals will be stored in the public database, encrypted so only the user can access so if a user changes his provider, there is continuity.
 
-txnlist=steve.get_txn_history(after_this_time)  # get list of transactions to show to user. 
+# get list of transactions to show to user.
+# transaction type will be auth_request, pull_request, receive_funds, send_funds, etc.
+# this allows the mobile app to get a real-time feed of transactions to show to the user.
+# also note when funds are sent, there is a real-time notification of that, even it the txn 
+# will take seconds to confirm on the blockchain. 
+txnlist=steve.get_txn_history(after_this_time)   
 
 '''
 stuff in the central database on per user basis

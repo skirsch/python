@@ -108,3 +108,9 @@ analyze(3972,   919, 2691, 907, "dose 4")
 analyze(6270, 263,  6699, 397, "aug sept 2021 injection vs. 1 year later NZ")
 # compute for NZ OIA request
 analyze(94,1662, 103, 1992, "NZ OIA month before peak COVID vs. month of peak COVID")
+
+# See vaccine infection stats.xlsx in OneDrive substack folder for the next 3
+# you are 1.24 more likely to get a COVID infection if you were vaccinated
+analyze(5226, 575, 11827, 1618, "substack 20,000 covid infection survey")
+analyze(1842,629, 3286, 2330, "unvaxxed vs. highly vaxxed risk of getting COVID")
+analyze(9778, 259, 7802, 327, "X survey on COVID infections")
