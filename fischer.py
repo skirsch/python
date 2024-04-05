@@ -3,6 +3,14 @@ import scipy
 from scipy.stats import fisher_exact
 from scipy.stats.contingency import odds_ratio
 
+# say vaccine is making things worse with more deaths
+1623
+# argument ORDER is no treat/ok, treatment/ok,   noT/bad, T/bad,
+# so the OK people first, then the # of injured
+# start with NO TREAT
+
+# odds ratio is simply (a/b)/(c/d) which is same as (a/c)/(b/d)
+
 # BEWARE OF the ONE-SIDED p-value!
 # the order of arguments matters (unlike for the two sided p-value)
 # analyze(100, 100, 1, 10, "80 year olds")
@@ -15,17 +23,15 @@ from scipy.stats.contingency import odds_ratio
 # so only use one-sided test when your experiment has HIGHER death rate than the control.
 # (because the criteria was "GREATER" in our one-sided testcum)
 
-# say vaccine is making things worse with more deaths
-# argument ORDER is no treat/ok, treatment/ok,   noT/bad, T/bad,
-# so the OK people first, then the # of injured
-# start with NO TREAT
-
-
 # this gives a statistic of 10 since odds of damage is 10X greater with the vax
 # print(scipy.stats.fisher_exact([[10, 100], [1, 100]]))   # two-sided p-value .01  odds ratio is 10X
 # print(scipy.stats.fisher_exact([[10, 100], [1, 100]], 'greater'))  # one-sided p-value if hypothesis of harm only
 
-def analyze(a,b,c,d, description):
+def analyze(placebo_ok, treat_ok,placebo_bad, treat_bad, description):
+    a=placebo_ok
+    b=treat_ok
+    c=placebo_bad
+    d=treat_bad
     print("\nStatistics for", description, "=", a,b,c,d, a+b+c+d)
     res=(fisher_exact([[a,b],[c,d]],'greater')) # one-sided p-value
     print("One-sided p-value", res.pvalue)  # probability of seeing at least this many events, given expected of a:c
@@ -114,3 +120,17 @@ analyze(94,1662, 103, 1992, "NZ OIA month before peak COVID vs. month of peak CO
 analyze(5226, 575, 11827, 1618, "substack 20,000 covid infection survey")
 analyze(1842,629, 3286, 2330, "unvaxxed vs. highly vaxxed risk of getting COVID")
 analyze(9778, 259, 7802, 327, "X survey on COVID infections")
+
+# sexual orientation issues for those under 24 years old
+analyze(391, 299, 1, 8, "sexual orientation issues those under 24")
+
+# for those under 60
+analyze(900,1366, 1, 22, "under 60 sex orientation")
+
+# statistics for No abnormal health conditions
+# there were 1745 with no vax and 1623 people highly vaxxed in our
+# sample in first 10,000
+analyze(1026, 422, 1262, 1794, "no chronic disease")
+
+analyze(2325, 2112, 18, 115, "5 or more chronic conditions")
+analyze(6977, 736, 44, 20, "Mom vaccinated during pregnancy vs. birth defects")
