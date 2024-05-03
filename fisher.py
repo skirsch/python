@@ -134,3 +134,5 @@ analyze(1026, 422, 1262, 1794, "no chronic disease")
 
 analyze(2325, 2112, 18, 115, "5 or more chronic conditions")
 analyze(6977, 736, 44, 20, "Mom vaccinated during pregnancy vs. birth defects")
+
+analyze(21828-60, 21823-311,60, 311, "Pfizer trial exclusions")
