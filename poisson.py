@@ -111,3 +111,7 @@ def cum(n,m):
 def cdf(n,m):
     return(poisson.cdf(n,m))
 # note that cdf(1,10) + cum(2,10) =1
+
+# use cum for more than mean 
+# use cdf functions for events happening less than the mean
+# use pmf for the probability of getting that value exactly.

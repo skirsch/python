@@ -134,3 +134,5 @@ analyze(1026, 422, 1262, 1794, "no chronic disease")
 
 analyze(2325, 2112, 18, 115, "5 or more chronic conditions")
 analyze(6977, 736, 44, 20, "Mom vaccinated during pregnancy vs. birth defects")
+analyze(13463-236, 464-19, 236, 19, "glaucoma caused by type 2 diabetes")
+analyze(13463-236, 89-4, 236, 4, "glaucoma caused by type 2 diabetes")
