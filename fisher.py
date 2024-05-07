@@ -136,3 +136,6 @@ analyze(2325, 2112, 18, 115, "5 or more chronic conditions")
 analyze(6977, 736, 44, 20, "Mom vaccinated during pregnancy vs. birth defects")
 
 analyze(21828-60, 21823-311,60, 311, "Pfizer trial exclusions")
+
+# JAMA study
+analyze(2403-1318, 8996-4906, 1318, 4906, "JAMA paper covid vs. flu VA")
