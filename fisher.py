@@ -139,3 +139,6 @@ analyze(21828-60, 21823-311,60, 311, "Pfizer trial exclusions")
 
 # JAMA study
 analyze(2403-1318, 8996-4906, 1318, 4906, "JAMA paper covid vs. flu VA")
+
+# Moderna vs. Pfizer stats on mortality for those born in 1956 (5 year period)
+analyze(420903, 43883, 4808,782, "moderna/pfizer mortality numbers")
