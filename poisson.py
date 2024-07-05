@@ -96,7 +96,7 @@ def cum(n,m):
     # answer=poisson.sf(n,m)+poisson.pmf(n,m)   # one way to do it
     return(poisson.sf(n-1,m))                    # the way more clever way to do it
 
-# Jennifer chubb is 250 cases, 50% happened within 48 hours. But 1/15 should have happened
+# Jennifer chubb police officer in omaha police dept is 250 cases, 50% happened within 48 hours. But 1/15 should have happened
 # within 48 hours. Expected 16.6, but got 125. cum(125,16.6) is 1.2e-64 and 86.4%
 # of SIDS deaths were caused by the vaccine
 
