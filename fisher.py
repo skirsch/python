@@ -142,3 +142,7 @@ analyze(2403-1318, 8996-4906, 1318, 4906, "JAMA paper covid vs. flu VA")
 
 # Moderna vs. Pfizer stats on mortality for those born in 1956 (5 year period)
 analyze(420903, 43883, 4808,782, "moderna/pfizer mortality numbers")
+
+# 1955 -1959 (age 65-69)
+# pfizer enrolled, moderna enrolled, pfizer dead, moderna dead
+analyze1(411920, 39973, 3463, 534, "pfizer vs. moderna study1 ages 65-69")
