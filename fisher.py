@@ -3,6 +3,9 @@ import scipy
 from scipy.stats import fisher_exact
 from scipy.stats.contingency import odds_ratio
 
+# NOTE: scipy uses a more sophisticated formula to estimate the true OR
+# when the numbers are small. It computes the maximum likelihood estimate for the odds ratio
+
 # say vaccine is making things worse with more deaths
 1623
 # argument ORDER is no treat/ok, treatment/ok,   noT/bad, T/bad,
@@ -10,6 +13,9 @@ from scipy.stats.contingency import odds_ratio
 # start with NO TREAT
 
 # odds ratio is simply (a/b)/(c/d) which is same as (a/c)/(b/d)
+
+# from the matrix, the odds ratio is multiply the AD axis and divide by the 
+# opposite axis
 
 # BEWARE OF the ONE-SIDED p-value!
 # the order of arguments matters (unlike for the two sided p-value)
@@ -38,9 +44,12 @@ def analyze(placebo_ok, treat_ok,placebo_bad, treat_bad, description):
     res2=(fisher_exact([[a,b],[c,d]],'two-sided')) # one-sided p-value
     print("Two-sided p-value", res2.pvalue)  # probability this is DIFFERENT than control
     res=odds_ratio([[a,b],[c,d]])
-    print("Odds ratio=", res.statistic)
-    print(res.confidence_interval(confidence_level=0.95))  # 95% confidence interval
-
+    print("Max likelihood estimate of the Odds ratio=", res.statistic)
+    print("Traditional OR=", (a*d)/(b*c))
+    print("95%", res.confidence_interval(confidence_level=0.95))  # 95% confidence interval
+    print("90%", res.confidence_interval(confidence_level=0.90))  # 95% confidence interval
+    print("85%", res.confidence_interval(confidence_level=0.85))  # 95% confidence interval
+    print("80%", res.confidence_interval(confidence_level=0.80))  # 95% confidence interval
 # analyze1 will take total cases as the first two arguments
 def analyze1(a,b,c,d,desc):
     analyze(a-c, b-d, c, d, desc)
@@ -146,3 +155,7 @@ analyze(420903, 43883, 4808,782, "moderna/pfizer mortality numbers")
 # 1955 -1959 (age 65-69)
 # pfizer enrolled, moderna enrolled, pfizer dead, moderna dead
 analyze1(411920, 39973, 3463, 534, "pfizer vs. moderna study1 ages 65-69")
+
+# Shots given in 1940s Pfizer vs. Novavax 2nd shot in April 2022
+analyze(68, 94, 1, 7, "novavax vs. pfizer second shot in apr 2022 to those born in 1940s")
+
