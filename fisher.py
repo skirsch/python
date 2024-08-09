@@ -54,6 +54,10 @@ def analyze(placebo_ok, treat_ok,placebo_bad, treat_bad, description):
 def analyze1(a,b,c,d,desc):
     analyze(a-c, b-d, c, d, desc)
 
+# placebo total injected, placebo dead, experiment injected, experiment dead
+def analyze2(a,c,b,d, desc):
+    analyze(a-c, b-d, c, d, desc)
+
 analyze(50,143,0,7, "wayne root deaths")
 analyze(50,117,0,33, "wayne root injuries")
 analyze(50, 750, 0, 250, "podiatrist")
@@ -158,4 +162,8 @@ analyze1(411920, 39973, 3463, 534, "pfizer vs. moderna study1 ages 65-69")
 
 # Shots given in 1940s Pfizer vs. Novavax 2nd shot in April 2022
 analyze(68, 94, 1, 7, "novavax vs. pfizer second shot in apr 2022 to those born in 1940s")
+
+# CT Medicare date for 85-89 year olds
+# moderna is the placebo and listed first
+analyze1(5786,19264 ,417, 1838, "CT Medicare 85-89 shot 2 1 year shots/deaths")
 
