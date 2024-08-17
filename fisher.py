@@ -7,7 +7,6 @@ from scipy.stats.contingency import odds_ratio
 # when the numbers are small. It computes the maximum likelihood estimate for the odds ratio
 
 # say vaccine is making things worse with more deaths
-1623
 # argument ORDER is no treat/ok, treatment/ok,   noT/bad, T/bad,
 # so the OK people first, then the # of injured
 # start with NO TREAT
@@ -45,7 +44,8 @@ def analyze(placebo_ok, treat_ok,placebo_bad, treat_bad, description):
     print("Two-sided p-value", res2.pvalue)  # probability this is DIFFERENT than control
     res=odds_ratio([[a,b],[c,d]])
     print("Max likelihood estimate of the Odds ratio=", res.statistic)
-    print("Traditional OR=", (a*d)/(b*c))
+    if b*c>0:
+        print("Traditional OR=", (a*d)/(b*c))
     print("95%", res.confidence_interval(confidence_level=0.95))  # 95% confidence interval
     print("90%", res.confidence_interval(confidence_level=0.90))  # 95% confidence interval
     print("85%", res.confidence_interval(confidence_level=0.85))  # 95% confidence interval
@@ -167,3 +167,8 @@ analyze(68, 94, 1, 7, "novavax vs. pfizer second shot in apr 2022 to those born 
 # moderna is the placebo and listed first
 analyze1(5786,19264 ,417, 1838, "CT Medicare 85-89 shot 2 1 year shots/deaths")
 
+# Apple Valley
+# placebo infected, dead ....; then "treated" infected, dead
+# clearly we didn't get unlucky
+# in this case, placebo is before vax rolled out 
+analyze2(27,0, 90, 28, "apple valley village before vax, after vax")
