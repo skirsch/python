@@ -172,3 +172,7 @@ analyze1(5786,19264 ,417, 1838, "CT Medicare 85-89 shot 2 1 year shots/deaths")
 # clearly we didn't get unlucky
 # in this case, placebo is before vax rolled out 
 analyze2(27,0, 90, 28, "apple valley village before vax, after vax")
+# unvaxxed #, myo/peri carditis #
+# https://www.medrxiv.org/content/10.1101/2024.05.20.24306810v1.full.pdf
+analyze2(47837, 0, 47803, 12, "myopericarditis")
+
