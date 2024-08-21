@@ -175,4 +175,5 @@ analyze2(27,0, 90, 28, "apple valley village before vax, after vax")
 # unvaxxed #, myo/peri carditis #
 # https://www.medrxiv.org/content/10.1101/2024.05.20.24306810v1.full.pdf
 analyze2(47837, 0, 47803, 12, "myopericarditis")
+analyze2(47837, 0, 47803, 3, "deaths")
 
