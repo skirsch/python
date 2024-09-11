@@ -108,6 +108,7 @@ def cum(n,m):
 # when expecting 100.
 
 # chance of seeing n or fewer events when expecting m events
+# this is the inverse of cum
 def cdf(n,m):
     return(poisson.cdf(n,m))
 # note that cdf(1,10) + cum(2,10) =1
