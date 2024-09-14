@@ -196,6 +196,9 @@ analyze2(23614, 33, 5025, 22, "FD0168 FC2473 Jun 1, age 50-54")
 # low impact
 # FD0168 FD4555 FE1248
 
+## new zealand batch data
+analyze2(14205,70, 2605,40, "NZ 60-64 year olds")
 
+analyze2(3123, 152, 520,54, "85 to 90 year olds dose 3 jan 2022, new zealand batches 34, 39")
 
-
+analyze2(5520, 139, 3053, 194, "batch 34 vs. batch 38 for ages 80 to 84 given jan feb 2022")
