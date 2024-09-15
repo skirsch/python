@@ -9,6 +9,7 @@ N=60
 data = np.random.normal(loc=0, scale=1, size=N)
 
 # Define the new bucket edges with two additional buckets on each tail
+# basically, for 3 or more std deviations, there are few data points
 buckets = [-np.inf, -4.5, -3.5, -2.5, -1.5, -0.5, 0.5, 1.5, 2.5, 3.5, 4.5, np.inf]
 
 # Plot the histogram
