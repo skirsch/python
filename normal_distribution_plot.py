@@ -20,5 +20,5 @@ plt.xlabel('Value')
 plt.ylabel('Frequency')
 plt.title(f'Histogram of {N} points from a normal distribution')
 
-# Show the plot
+# Show the plot 
 plt.show()
