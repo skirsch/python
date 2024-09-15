@@ -202,3 +202,4 @@ analyze2(14205,70, 2605,40, "NZ 60-64 year olds")
 analyze2(3123, 152, 520,54, "85 to 90 year olds dose 3 jan 2022, new zealand batches 34, 39")
 
 analyze2(5520, 139, 3053, 194, "batch 34 vs. batch 38 for ages 80 to 84 given jan feb 2022")
+analyze2(235762, 112, 232692, 130, "25-29 v 20-24 new zealand all batches and doses")
