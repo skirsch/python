@@ -59,6 +59,8 @@ def create_blinking_square(size):
 # Example usage:
 create_blinking_square((1920, 1080))
 
-
+## this creates a new window and pops it up.
+# Cursor keys to change brightness
+# Space key terminates it
 
 
