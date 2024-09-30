@@ -177,3 +177,29 @@ analyze2(27,0, 90, 28, "apple valley village before vax, after vax")
 analyze2(47837, 0, 47803, 12, "myopericarditis")
 analyze2(47837, 0, 47803, 3, "deaths")
 
+### batch analysis
+analyze2(40984,179,10746,84, "FD6840 vs FC2473, 60-64 year olds")
+
+### June 2021 administration
+# age 60-64 Comirnaty
+analyze2(72904,178, 6238,48, "FD0168 v FC2473, age 60-64, June 2021")
+# age 50-64
+analyze2(138288,296, 16073,102, "FD0168 FC2473 Jun 1, age 50-65")
+analyze2(23614, 33, 5025, 22, "FD0168 FC2473 Jun 1, age 50-54")
+
+# FC0681 looks deadly to 60-65
+# FC2473
+# FF2832
+# FF3318
+# FA4598
+
+# low impact
+# FD0168 FD4555 FE1248
+
+## new zealand batch data
+analyze2(14205,70, 2605,40, "NZ 60-64 year olds")
+
+analyze2(3123, 152, 520,54, "85 to 90 year olds dose 3 jan 2022, new zealand batches 34, 39")
+
+analyze2(5520, 139, 3053, 194, "batch 34 vs. batch 38 for ages 80 to 84 given jan feb 2022")
+analyze2(235762, 112, 232692, 130, "25-29 v 20-24 new zealand all batches and doses")

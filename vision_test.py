@@ -2,7 +2,8 @@ import pygame
 import time
 
 def create_blinking_square(size):
-  """Creates a blinking white square with brightness control and exit functionality.
+  """
+  Creates a blinking white square with brightness control and exit functionality.
 
   Args:
     size: Size of the window (width, height).
@@ -57,3 +58,9 @@ def create_blinking_square(size):
 
 # Example usage:
 create_blinking_square((1920, 1080))
+
+## this creates a new window and pops it up.
+# Cursor keys to change brightness
+# Space key terminates it
+
+
