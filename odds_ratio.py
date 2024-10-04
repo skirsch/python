@@ -1,6 +1,7 @@
 # from chatgpt
 import statsmodels.api as sm
 import scipy.stats as stats
+from math import log, exp, sqrt
 
 def calculate_odds_ratio_ci_z_p(a, b, c, d, alpha=0.05):
     # Create a 2x2 contingency table
@@ -39,15 +40,35 @@ def odds(a,b,c,d):
     print("Exact P-Value from Fisher test:", p_value)
     # note that the p-value estimated from the Z-score will be LESS accurate
     # because it assumes a normal distribution
+    return odds_ratio
 
 # use odds2 if have TOTAL count unvaxxed, TOTAL count vaxxed, unvaxxed dead, vaxxed dead
-
+# ie., shots, deaths, shots, deahts for placebo then treatment
 def odds2(a,b,c,d):
     print("odds before", c/(a-c))
     print("odds after", d/(b-d))
-    odds(a-c, b-d, c,d)
+    return (odds(a-c, b-d, c,d))
 
-odds(a,b,c,d)
+odds(a,b,c,d)  # compute for our test case
+
+# 8 value odds.. placebo values first
+# this is like odds2 but different order: shots, death, then shots,death
+# pfizer male (shots, dead) then , pfizer female .then.. moderna same 4 values
+def odds8(a,b,c,d,e,f,g,h):
+    OR1=odds2(a,c,b,d)
+    OR2=odds2(e,g, f,h)
+    OR3=OR2/OR1
+    print("OR values=", OR1, OR2, OR3)
+    print("Confidence interval for", OR3)
+    selog=sqrt(1/b+1/d+1/f +1/h)
+    or_low = exp(log(OR3)-1.96*selog)
+    or_high = exp(log(OR3)+1.96*selog)
+    print(or_low, or_high)
+
+    # now confidence interval
+
+# pfizer female, pfizer male (shots, dead)..then.. moderna same 4 values
+odds8(212021,	422, 212244,	918,    19218,	47, 18419,	149)
 
 """
 odds2(100,100, 10, 1) gives:
