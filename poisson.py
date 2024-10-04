@@ -116,3 +116,7 @@ def cdf(n,m):
 # use cum for more than mean 
 # use cdf functions for events happening less than the mean
 # use pmf for the probability of getting that value exactly.
+
+# fdny 6 deaths in 3 months. normal rate is 1 in 12 months
+# so got 6 but expected 3/12
+cum(6, 3/12.)
