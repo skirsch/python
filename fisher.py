@@ -213,3 +213,6 @@ analyze2(47837, 0, 47802, 12, "kids with myo/pericarditis in UK study")
 
 ### dose 1 pfizer vs moderna in czech study (this is overall numbers)
 analyze2(5449647, 51458, 516562, 10018, "Pfizer vs. Moderna Dose 1 czech data")
+
+# child asthma paper   unvaxxed N and deaths, vaxxed N and deaths
+analyze2( 159357, 140+169,  32088, 188+166, "asthma paper" )
