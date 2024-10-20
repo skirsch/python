@@ -46,13 +46,13 @@ def analyze(placebo_ok, treat_ok,placebo_bad, treat_bad, description):
     print("Max likelihood estimate of the Odds ratio=", res.statistic)
     if b*c>0:
         print("Traditional OR=", (a*d)/(b*c))
-    print("99.99%", res.confidence_interval(confidence_level=0.9999))  # 99.99% confidence interval
-    print("99.9%", res.confidence_interval(confidence_level=0.999))  # 99.9% confidence interval
-    print("99%", res.confidence_interval(confidence_level=0.99))  # 99% confidence interval
+    #print("99.99%", res.confidence_interval(confidence_level=0.9999))  # 99.99% confidence interval
+    #print("99.9%", res.confidence_interval(confidence_level=0.999))  # 99.9% confidence interval
+    #print("99%", res.confidence_interval(confidence_level=0.99))  # 99% confidence interval
     print("95%", res.confidence_interval(confidence_level=0.95))  # 95% confidence interval
-    print("90%", res.confidence_interval(confidence_level=0.90))  # 95% confidence interval
-    print("85%", res.confidence_interval(confidence_level=0.85))  # 95% confidence interval
-    print("80%", res.confidence_interval(confidence_level=0.80))  # 95% confidence interval
+    #print("90%", res.confidence_interval(confidence_level=0.90))  # 95% confidence interval
+    #print("85%", res.confidence_interval(confidence_level=0.85))  # 95% confidence interval
+    #print("80%", res.confidence_interval(confidence_level=0.80))  # 95% confidence interval
 # analyze1 will take total cases as the first two arguments
 def analyze1(a,b,c,d,desc):
     analyze(a-c, b-d, c, d, desc)
@@ -207,7 +207,7 @@ analyze2(3123, 152, 520,54, "85 to 90 year olds dose 3 jan 2022, new zealand bat
 
 analyze2(5520, 139, 3053, 194, "batch 34 vs. batch 38 for ages 80 to 84 given jan feb 2022")
 analyze2(235762, 112, 232692, 130, "25-29 v 20-24 new zealand all batches and doses")
-'''
+
 
 analyze2(47837, 0, 47802, 12, "kids with myo/pericarditis in UK study")
 
@@ -216,3 +216,7 @@ analyze2(5449647, 51458, 516562, 10018, "Pfizer vs. Moderna Dose 1 czech data")
 
 # child asthma paper   unvaxxed N and deaths, vaxxed N and deaths
 analyze2( 159357, 140+169,  32088, 188+166, "asthma paper" )
+
+'''
+
+analyze2(2576, 330, 891,168, "SCC public health LTCF")
