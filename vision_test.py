@@ -14,7 +14,7 @@ def create_blinking_square(size):
   pygame.display.set_caption("Blinking Square")
 
   black = (0, 0, 0)
-  brightness = 128  # Initial brightness
+  brightness = 255  # Initial brightness
   blinking = True
 
   square_size = 50  # Adjust square size as needed
