@@ -37,7 +37,7 @@ def analyze(placebo_ok, treat_ok,placebo_bad, treat_bad, description):
     b=round(treat_ok)
     c=round(placebo_bad)
     d=round(treat_bad)
-    print("\nStatistics for", description, "=", a,b,c,d, a+b+c+d)
+    print("\nStatistics for", description, "=", a,b,c,d, a+c, b+d, a+b+c+d)
     res=(fisher_exact([[a,b],[c,d]],'greater')) # one-sided p-value
     print("One-sided p-value", res.pvalue)  # probability of seeing at least this many events, given expected of a:c
     res2=(fisher_exact([[a,b],[c,d]],'two-sided')) # one-sided p-value
@@ -222,32 +222,65 @@ analyze2( 159357, 140+169,  32088, 188+166, "asthma paper" )
 analyze2(2576, 330, 891,168, "SCC public health LTCF")
 analyze2(1000, 13, 1000, 36, "pollfish survey")
 
-# analyze is placebo ok, treat ok
-# pre-print placebo is flu
+# Xie JAMA paper
+# # analyze is placebo ok, treat ok
+# placebo is flu rates when for looking at COVID vax rates
 p=2403 # placebo got flu
 t=8996 # treatment
+
 # vaccinated vs. unvaccinated
-analyze(.8111*p, .7927*t, .1889*p, .2073*t, "Xie paper vax v unvax")
+a=1-.1889  # hospitalized for the flu
+b=1-.2073  # hospitalized for COVID (20.73% unvaxxed)
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "vaxxed vs. uvax ")
+
+# with propensity flu changes
+a=1-.1784
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "vaxxed vs. uvax with propensity ")
+
 # benefit of booster
 a=.5485
 b=.5454
-analyze(a*p, b*t, (1-a)*p, (1-b)*t, "booster benefit")
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "booster only benefit")
 
-a=a+.2151
-b=b+.2046
-analyze(a*p, b*t, (1-a)*p, (1-b)*t, "2 or more doses")
-a=a+.0474
-b=b+.0427
-analyze(a*p, b*t, (1-a)*p, (1-b)*t, "1 or more doses")
+############## propensity stuff
 
+# benefit of dose 1 shot
+a=.0468  # flu rate
+b=.0427  # Covid rate
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "dose 1 only with propensity")
+
+# benefit of dose 2 shot
+a=.2206  # flu rate
+b=.2047  # Covid rate
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "primary series benefit with propensity")
+
+# benefit of being fully vaccinated (booster) propensity
+a=.5543  # flu rate
+b=.5454  # Covid rate
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "boosted benefit with propensity")
+
+#################################
 # now for 1 dose
 a=.0474
 b=.0427
 analyze(a*p, b*t, (1-a)*p, (1-b)*t, "1 dose only")
 
 # 1 and 2 doses
-a=a+.2151
+a=a+.2151 # control flu rate
 b=b+.2046
-analyze(a*p, b*t, (1-a)*p, (1-b)*t, "both primary doses")
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "both primary doses ")
 
 # need to take 3 doses to get a benefit and it's not statistically significant
+
+# flu
+a=.6384   # control vaxxed covid rate
+b=.6188   # treatment vaxxed flu rate
+t=2403 # treatment got flu
+p=8996 # placebo COVID rate
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "flu vaccine before propensity")
+
+a=.6384   # control vaxxed covid rate
+b=.6343   # treatment vaxxed flu rate
+t=2403 # treatment got flu
+p=8996 # placebo COVID rate
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "flu vaccine after propensity")
