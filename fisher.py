@@ -33,10 +33,10 @@ from scipy.stats.contingency import odds_ratio
 # print(scipy.stats.fisher_exact([[10, 100], [1, 100]], 'greater'))  # one-sided p-value if hypothesis of harm only
 
 def analyze(placebo_ok, treat_ok,placebo_bad, treat_bad, description):
-    a=placebo_ok
-    b=treat_ok
-    c=placebo_bad
-    d=treat_bad
+    a=round(placebo_ok)
+    b=round(treat_ok)
+    c=round(placebo_bad)
+    d=round(treat_bad)
     print("\nStatistics for", description, "=", a,b,c,d, a+b+c+d)
     res=(fisher_exact([[a,b],[c,d]],'greater')) # one-sided p-value
     print("One-sided p-value", res.pvalue)  # probability of seeing at least this many events, given expected of a:c
@@ -220,3 +220,34 @@ analyze2( 159357, 140+169,  32088, 188+166, "asthma paper" )
 '''
 
 analyze2(2576, 330, 891,168, "SCC public health LTCF")
+analyze2(1000, 13, 1000, 36, "pollfish survey")
+
+# analyze is placebo ok, treat ok
+# pre-print placebo is flu
+p=2403 # placebo got flu
+t=8996 # treatment
+# vaccinated vs. unvaccinated
+analyze(.8111*p, .7927*t, .1889*p, .2073*t, "Xie paper vax v unvax")
+# benefit of booster
+a=.5485
+b=.5454
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "booster benefit")
+
+a=a+.2151
+b=b+.2046
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "2 or more doses")
+a=a+.0474
+b=b+.0427
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "1 or more doses")
+
+# now for 1 dose
+a=.0474
+b=.0427
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "1 dose only")
+
+# 1 and 2 doses
+a=a+.2151
+b=b+.2046
+analyze(a*p, b*t, (1-a)*p, (1-b)*t, "both primary doses")
+
+# need to take 3 doses to get a benefit and it's not statistically significant
