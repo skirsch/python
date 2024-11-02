@@ -7,6 +7,10 @@ Every 10 months rebalance so equal weight
 CURRENT BUGS:
 1. It's rebalancing every month, instead of every 10 months
 2. It's picking stocks based on name of the stock instead of the market cap
+3. This takes many seconds to run. Run report shows:
+Algorithm Id:(6e99e3f6452bb131acabf387d346935e) completed in 102.52 seconds at 55k data points per second. Processing total of 5,595,977 data points.
+
+But it should only be looking once every 10 months to rebalance so 5M datapoints seems pretty ridiculous.
 
 Apparently Mia and ChatGPT can't generate working quantconnect code
 
