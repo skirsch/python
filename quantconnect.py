@@ -4,6 +4,12 @@ simple quantconnect strategy to see how it works
 pick the top 5 market cap stocks in QQQ index, equal weight
 Every 10 months rebalance so equal weight
 
+CURRENT BUGS:
+1. It's rebalancing every month, instead of every 10 months
+2. It's picking stocks based on name of the stock instead of the market cap
+
+Apparently Mia and ChatGPT can't generate working quantconnect code
+
 """
 # region imports
 from AlgorithmImports import *
