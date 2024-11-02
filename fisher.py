@@ -284,3 +284,6 @@ b=.6343   # treatment vaxxed flu rate
 t=2403 # treatment got flu
 p=8996 # placebo COVID rate
 analyze(a*p, b*t, (1-a)*p, (1-b)*t, "flu vaccine after propensity")
+
+### rct
+analyze(22000, 14, 22000, 15, "pfizer rct")
