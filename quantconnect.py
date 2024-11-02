@@ -5,6 +5,9 @@ pick the top 5 market cap stocks in QQQ index, equal weight
 Every 10 months rebalance so equal weight
 
 """
+# region imports
+from AlgorithmImports import *
+# endregion
 
 NUM_STOCKS=5         # Number of top stocks by market cap to trade
 REBALANCE_MONTH=10   # rebalance every 10 months
