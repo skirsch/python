@@ -36,7 +36,6 @@ class MarketCapStrategy(QCAlgorithm):
         # Define market cap threshold and limit
         self.market_cap_limit = NUM_STOCKS
 
-        self.universe_settings.schedule.on(self.date_rules.month_start(STOCK_INDEX))
         # Universe selection to get fine fundamental data
         self._universe: Universe = self.add_universe(
             self.CoarseSelectionFunction, self.FineSelectionFunction
