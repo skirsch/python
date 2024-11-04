@@ -3,7 +3,7 @@ from AlgorithmImports import *
 
 # endregion
 
-SYMBOL_LIST = ["GOOG", "AAPL", "NVDA", "MSFT"]
+SYMBOL_LIST = ["GOOG", "AAPL", "NVDA", "MSFT", "AMZN"]
 STARTING_CASH = 1000000
 STOCK_INDEX = "SPY"
 
