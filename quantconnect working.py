@@ -22,14 +22,14 @@ from AlgorithmImports import *
 # endregion
 
 NUM_STOCKS = 5  # Number of top stocks by market cap to trade
-REBALANCE_MONTHS = [12]  # rebalance months so get LTCG on holdings
+REBALANCE_MONTHS = (3, 6, 9, 12)  # rebalance months
 STOCK_INDEX = "QQQ"  # look only in stocks in QQQ (would like to pick s&p vs. qqq)
 STARTING_CASH = 1000000  # starting cash
 
 
 class MarketCapStrategy(QCAlgorithm):
     def Initialize(self):
-        self.set_start_date(2015, 1, 1)  # start
+        self.set_start_date(2019, 1, 1)  # start
         self.set_end_date(2024, 7, 28)  # last day on free account data
         self.set_cash(STARTING_CASH)  # 1M starting amount
 
@@ -41,7 +41,7 @@ class MarketCapStrategy(QCAlgorithm):
             self.CoarseSelectionFunction, self.FineSelectionFunction
         )
 
-        # Schedule monthly rebalancing
+        # Schedule daily rebalancing
         self.schedule.on(
             self.date_rules.month_start(STOCK_INDEX),
             self.time_rules.at(9, 31),  # at 9:31am rebalance (wait 1 min for data)
@@ -56,8 +56,8 @@ class MarketCapStrategy(QCAlgorithm):
         # Sort by market cap and select the top stocks
         sorted_by_market_cap = sorted(fine, key=lambda x: x.market_cap, reverse=True)
         top_market_cap_stocks = sorted_by_market_cap[: self.market_cap_limit]
-        # return [stock.symbol for stock in top_market_cap_stocks]
-        return ["AAPL", "MSFT", "GOOG", "AMZN", "NVDA"]
+        return [stock.symbol for stock in top_market_cap_stocks]
+
     def Rebalance(self):
         if self.time.month not in REBALANCE_MONTHS:
             return
