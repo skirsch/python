@@ -288,6 +288,6 @@ analyze(a*p, b*t, (1-a)*p, (1-b)*t, "flu vaccine after propensity")
 ### rct
 analyze(22000, 14, 22000, 15, "pfizer rct")
 
-### santa clara county CFR by quarter
+### santa clara county CFR by quarter with 8 day death shift
 analyze2(3749,409, 1020, 244, "scc phd CFR Q4 vs. Q1")
 
