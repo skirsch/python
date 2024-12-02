@@ -50,7 +50,7 @@ def analyze(placebo_ok, treat_ok,placebo_bad, treat_bad, description):
     #print("99.9%", res.confidence_interval(confidence_level=0.999))  # 99.9% confidence interval
     #print("99%", res.confidence_interval(confidence_level=0.99))  # 99% confidence interval
     print("95%", res.confidence_interval(confidence_level=0.95))  # 95% confidence interval
-    #print("90%", res.confidence_interval(confidence_level=0.90))  # 95% confidence interval
+    print("90%", res.confidence_interval(confidence_level=0.90))  # 95% confidence interval
     #print("85%", res.confidence_interval(confidence_level=0.85))  # 95% confidence interval
     #print("80%", res.confidence_interval(confidence_level=0.80))  # 95% confidence interval
 # analyze1 will take total cases as the first two arguments
@@ -291,3 +291,9 @@ analyze(22000, 14, 22000, 15, "pfizer rct")
 ### santa clara county CFR by quarter
 analyze2(3749,409, 1020, 244, "scc phd CFR Q4 vs. Q1")
 
+### Paul Thomas study... no vax injected, cases ; full vaxxed 
+analyze2(561, 0, 894, 15, "paul thomas autism study")
+
+# Pfizer preg clinical trial
+# vs. 159 2 events (placebo) vs 156, 8  drugged 
+analyze2(159,2, 156,8, "Pfizer preg trial outcome 19")
