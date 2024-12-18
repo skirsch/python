@@ -47,8 +47,8 @@ def analyze(placebo_ok, treat_ok,placebo_bad, treat_bad, description):
     if b*c>0:
         print("Traditional OR=", (a*d)/(b*c))
     #print("99.99%", res.confidence_interval(confidence_level=0.9999))  # 99.99% confidence interval
-    #print("99.9%", res.confidence_interval(confidence_level=0.999))  # 99.9% confidence interval
-    #print("99%", res.confidence_interval(confidence_level=0.99))  # 99% confidence interval
+    print("99.9%", res.confidence_interval(confidence_level=0.999))  # 99.9% confidence interval
+    print("99%", res.confidence_interval(confidence_level=0.99))  # 99% confidence interval
     print("95%", res.confidence_interval(confidence_level=0.95))  # 95% confidence interval
     print("90%", res.confidence_interval(confidence_level=0.90))  # 95% confidence interval
     #print("85%", res.confidence_interval(confidence_level=0.85))  # 95% confidence interval
@@ -297,3 +297,15 @@ analyze2(561, 0, 894, 15, "paul thomas autism study")
 # Pfizer preg clinical trial
 # vs. 159 2 events (placebo) vs 156, 8  drugged 
 analyze2(159,2, 156,8, "Pfizer preg trial outcome 19")
+
+# frontiers COVID paper
+# unvaxxed total, unvaxxed die, vaxxed total, vaxxed died
+analyze2(89, 89*.37, 23, 23*.7, "Frontiers Adhikari paper")
+
+# same calculation but look at those who died from non-COVID
+# 25 unvaxxed, 36% died. 15 vaxxed, 27% died
+analyze2(25, .36*25, 15, 15*.27, "Frontiers; died from non-COVID")
+
+# now reverse the order to see if you were 2x more likely if you were unvax
+# so vaxxed is first so OR is the other way
+analyze2(15, 15*.27, 25, .36*25, "Frontiers; died from non-COVID")
