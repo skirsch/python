@@ -272,12 +272,15 @@ analyze(a*p, b*t, (1-a)*p, (1-b)*t, "both primary doses ")
 
 # need to take 3 doses to get a benefit and it's not statistically significant
 
+### I screwed up. and reversed the args for the paper!
 # flu
 a=.6384   # control vaxxed covid rate
 b=.6188   # treatment vaxxed flu rate
 t=2403 # treatment got flu
 p=8996 # placebo COVID rate
 analyze(a*p, b*t, (1-a)*p, (1-b)*t, "flu vaccine before propensity")
+analyze((1-a)*p, (1-b)*t, a*p, b*t, "flu vaccine before propensity")
+
 
 a=.6384   # control vaxxed covid rate
 b=.6343   # treatment vaxxed flu rate
