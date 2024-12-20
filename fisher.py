@@ -303,7 +303,8 @@ analyze2(159,2, 156,8, "Pfizer preg trial outcome 19")
 
 # frontiers COVID paper
 # unvaxxed total, unvaxxed die, vaxxed total, vaxxed died
-analyze2(89, 89*.37, 23, 23*.7, "Frontiers Adhikari paper")
+analyze2(89, 89*.37, 23, 23*.7, "Frontiers Adhikari paper; Odds of dying from COVID if you were vaccinated")
+
 
 # same calculation but look at those who died from non-COVID
 # 25 unvaxxed, 36% died. 15 vaxxed, 27% died
