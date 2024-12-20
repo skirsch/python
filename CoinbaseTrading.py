@@ -94,7 +94,8 @@ def twap(total_USD_amt, trade_side,  pairs, num_hours, granularity=100, start=0)
 # twap(40000, BUY, ('BTC-USDC', 'ETH-USDC'), 6, 50)
         
 # if buying just a single crypto, don't forget the , or you'll be sorry!
-twap(60000, BUY, ('BTC-USDC',), 12, 100)        
+# so the line below makes 100 buys over 12 hours with an objective of $60K
+#twap(60000, BUY, ('BTC-USDC',), 12, 100)        
 
 # I have a .bat file which simply has 
 # python <path to my script>
