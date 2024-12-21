@@ -1,3 +1,5 @@
+## this is from chatgpt and doesn't give you MAKER orders
+
 import time
 import requests
 

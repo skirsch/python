@@ -1,6 +1,9 @@
 '''
 simple steps
 
+0. Install with pip3 install coinbase-advanced-py
+
+
 1. Generate trading API keys from Coinbase in their API section. Make sure they are locked to your IP (use your full external IPv4 addresss)
 2. Add the keys into your environment variables on your windows box (type "environment" into the search box and you'll get the window to do this)
 
@@ -16,9 +19,6 @@ python <path to the script>
 
 
 '''
-
-
-
 
 # https://github.com/coinbase/coinbase-advanced-py?tab=readme-ov-file
 # https://coinbase.github.io/coinbase-advanced-py/
@@ -72,19 +72,19 @@ def place_order(dollar_amount, trading_pair, trade_side):
 # place_order(4.50, 'BTC-USD')   # buy $4.50 worth of BTC
 
 # now for the twap to buy 1% of total at num_days/100 interval
-def twap(total_USD_amt, trade_side,  pairs, num_hours, granularity=100, start=0):
+def twap(total_USD_amt, trade_side,  pair, num_hours, granularity=100, start=0):
     sleep_seconds=num_hours*3600/granularity
     for i in range(start, granularity):
         print(f"\n{ctime()}: Placing order {i} of {granularity}")
         print("Minutes between orders=", sleep_seconds/60)
         print("Order amount (USD)", total_USD_amt/(granularity*len(pairs)))
         # place all orders
-        for pair in pairs:
-            try:
-                place_order(total_USD_amt/(granularity*len(pairs)), pair, trade_side)
-            except:
-                print("An error occurred:", sys.exc_info()[0])  # Print the error type
-                print("The error message:", sys.exc_info()[1])  # Print the error message
+       
+        try:
+            place_order(total_USD_amt/(granularity), pair, trade_side)
+        except:
+            print("An error occurred:", sys.exc_info()[0])  # Print the error type
+            print("The error message:", sys.exc_info()[1])  # Print the error message
                 # Optionally, you can also print the traceback for more details:
                 # traceback.print_exc()
         sleep(sleep_seconds)   # convert entire interval to seconds and divide by number of intervals 
@@ -101,3 +101,26 @@ def twap(total_USD_amt, trade_side,  pairs, num_hours, granularity=100, start=0)
 # python <path to my script>
 
 # then I just double click the bat file to initiate the transaction
+
+## sell my BTC over .2 hours with 2 trades
+# twap(1000, SELL, 'BTC-USDC', .2, 4)      
+import argparse
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run the TWAP strategy with specified parameters.")
+
+    # Define command-line arguments
+    parser.add_argument("amount", type=float, help="Amount in USD to trade")
+    parser.add_argument("side", type=str, choices=[BUY, SELL], help="Side of the trade (buy or sell)")
+    parser.add_argument("trading_pair", type=str, help="Trading pair (e.g., BTC-USD)")
+    parser.add_argument("num_hours", type=int, help="Total time for the TWAP strategy (in hours)")
+    parser.add_argument("granularity", type=int, help="Total number of trades within the time period")
+
+    # Parse arguments
+    args = parser.parse_args()
+
+    # Call the twap function with the parsed arguments
+    twap(args.amount, args.side, args.trading_pair, args.num_hours, args.granularity)
+
+# Example:  
+#       python twap.py 1000 'SELL' 'BTC-USDC', .1, 5)
