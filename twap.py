@@ -77,7 +77,7 @@ def twap(total_USD_amt, trade_side,  pair, num_hours, granularity=100, start=0):
     for i in range(start, granularity):
         print(f"\n{ctime()}: Placing order {i} of {granularity}")
         print("Minutes between orders=", sleep_seconds/60)
-        print("Order amount (USD)", total_USD_amt/(granularity*len(pairs)))
+        print("Order amount (USD)", total_USD_amt/granularity)
         # place all orders
        
         try:
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     parser.add_argument("amount", type=float, help="Amount in USD to trade")
     parser.add_argument("side", type=str, choices=[BUY, SELL], help="Side of the trade (buy or sell)")
     parser.add_argument("trading_pair", type=str, help="Trading pair (e.g., BTC-USD)")
-    parser.add_argument("num_hours", type=int, help="Total time for the TWAP strategy (in hours)")
+    parser.add_argument("num_hours", type=float, help="Total time for the TWAP strategy (in hours)")
     parser.add_argument("granularity", type=int, help="Total number of trades within the time period")
 
     # Parse arguments
@@ -123,4 +123,6 @@ if __name__ == "__main__":
     twap(args.amount, args.side, args.trading_pair, args.num_hours, args.granularity)
 
 # Example:  
-#       python twap.py 1000 'SELL' 'BTC-USDC', .1, 5)
+#       python twap.py 1000 SELL BTC-USDC .1 5
+#       python twap.py 150000 SELL BTC-USDC 8 100
+#       python twap.py 150000 SELL ETH-USDC 8 100
