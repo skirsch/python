@@ -313,3 +313,13 @@ analyze2(25, .36*25, 15, 15*.27, "Frontiers; died from non-COVID")
 # now reverse the order to see if you were 2x more likely if you were unvax
 # so vaxxed is first so OR is the other way
 analyze2(15, 15*.27, 25, .36*25, "Frontiers; died from non-COVID")
+
+analyze2( 162,2, 8,1, "pfizer CFR")
+analyze2(850,2, 77,1, "pfizer CFR")
+# Prison outbreak https://www.cdc.gov/mmwr/volumes/70/wr/mm7038e3.htm
+# VE was only 13%3
+analyze2(42,3,185,56,  "prison outbreak")
+# barnstable 469 cases. 
+# control would be 469
+# 69% population vaxxed so expected .69*469 to get infected
+analyze2(649, int(649*.69), 649, int(649*.74), "barnstable")
