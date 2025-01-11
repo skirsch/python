@@ -323,3 +323,10 @@ analyze2(42,3,185,56,  "prison outbreak")
 # control would be 469
 # 69% population vaxxed so expected .69*469 to get infected
 analyze2(649, int(649*.69), 649, int(649*.74), "barnstable")
+
+# pfizer serropositive
+# https://www.medrxiv.org/content/10.1101/2022.04.18.22271936v1.full
+# https://philharper.substack.com/p/a-public-verification-of-jikkyleaks?utm_source=publication-search
+analyze2(133,40, 160+75, 75, "pfizer N-antibody" )
+
+analyze2(10,1, 75, 75, "office COVID infections")
