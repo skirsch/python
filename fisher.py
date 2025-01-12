@@ -330,3 +330,5 @@ analyze2(649, int(649*.69), 649, int(649*.74), "barnstable")
 analyze2(133,40, 160+75, 75, "pfizer N-antibody" )
 
 analyze2(10,1, 75, 75, "office COVID infections")
+
+analyze2(228, 116, 1445, 1420, "infection rate of unv vs vaxxed")
