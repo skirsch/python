@@ -332,3 +332,11 @@ analyze2(133,40, 160+75, 75, "pfizer N-antibody" )
 analyze2(10,1, 75, 75, "office COVID infections")
 
 analyze2(228, 116, 1445, 1420, "infection rate of unv vs vaxxed")
+
+# low vs. high covid cases
+analyze(5702, 2394, 714, 228, "covid cases for 9x% vax vs 8x% vax")
+analyze(5702, 1660, 714, 166, "9x% vs. 7x%")
+# so both are statistically signif lower than the 90%
+
+# but 7x and 8x are similar; no difference; and 8x is worse
+analyze(2394, 1660, 228, 166, "8x vs. 7x%") 
