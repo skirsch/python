@@ -5,16 +5,20 @@
 import pandas as pd
 import statsmodels.api as sm
 
-def multiple_regression_with_multiple_y(filename, blank_column_name):
+def multiple_regression_with_multiple_y(filename):
     # Read the CSV file
-    data = pd.read_csv(filename)
+    # data = pd.read_csv(filename)
+    data = pd.read_excel(filename, sheet_name="regression")
+
     
-    # Find the blank column
-    blank_col_index = data.columns.get_loc(blank_column_name)
+    # columns numbered 0 onwards. index=exact col number with text
+    start_col_index=data.columns.get_loc('x') 
+    sep_col_index = data.columns.get_loc('y')   # y values start after this 
+    end_col_index=data.columns.get_loc('end')  # stop here
     
     # Split data into X and Y based on the blank column
-    X = data.iloc[:, :blank_col_index]  # Columns before the blank column
-    Y = data.iloc[:, blank_col_index + 1:]  # Columns after the blank column
+    X = data.iloc[:, start_col_index+1:sep_col_index]  # Columns before the blank column
+    Y = data.iloc[:, sep_col_index + 1: end_col_index]  # Columns after the blank column
     
     # Perform regression for each Y column
     results = {}
@@ -28,11 +32,10 @@ def multiple_regression_with_multiple_y(filename, blank_column_name):
 
 # Example usage
 def run(): 
-    filename = "regression.csv"  # Replace with your CSV filename
-    blank_column_name = "STOP"  # Replace with the name of the blank column in your dataset
+    filename = "regression.xlsx"  # xls with regression sheet
 
     # Run the regression and display the results
-    regression_results = multiple_regression_with_multiple_y(filename, blank_column_name)
+    regression_results = multiple_regression_with_multiple_y(filename)
     for y_var, summary in regression_results.items():
         print(f"Regression Results for {y_var}:\n")
         print(summary)
