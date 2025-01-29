@@ -32,7 +32,8 @@ def multiple_regression_with_multiple_y(filename):
 
 # Example usage
 def run(): 
-    filename = "regression.xlsx"  # xls with regression sheet
+    filename= "regression.xlsx"
+    filename = "../debate/ACM v3.xlsx"  # xls with regression sheet
 
     # Run the regression and display the results
     regression_results = multiple_regression_with_multiple_y(filename)
