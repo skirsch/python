@@ -340,3 +340,6 @@ analyze(5702, 1660, 714, 166, "9x% vs. 7x%")
 
 # but 7x and 8x are similar; no difference; and 8x is worse
 analyze(2394, 1660, 228, 166, "8x vs. 7x%") 
+
+# SCC deaths
+analyze(76,28, 26, 7, "scc deaths")
