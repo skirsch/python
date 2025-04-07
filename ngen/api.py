@@ -52,3 +52,6 @@ Create a callback function for approving a payment Request once the user has cre
 
 Initiate a cross border payment
 
+define a side betting pool
+allow people to deposit to both sides
+winner is decide and funds are moved 
