@@ -120,3 +120,6 @@ def cdf(n,m):
 # fdny 6 deaths in 3 months. normal rate is 1 in 12 months
 # so got 6 but expected 3/12
 # cum(6, 3/12.)
+
+# expected 50, saw one
+# cdf(1, 50)
