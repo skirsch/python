@@ -18,12 +18,13 @@ for dir in */; do
 
     # Ensure remote uses SSH
     REMOTE_URL=$(git remote get-url origin)
-    if [[ "$REMOTE_URL" =~ ^https://github.com/(.*)/(.*)\.git$ ]]; then
-      USER=${BASH_REMATCH[1]}
-      REPO=${BASH_REMATCH[2]}
-      SSH_URL="git@github.com:$USER/$REPO.git"
-      echo "Converting remote to SSH: $SSH_URL"
-      git remote set-url origin "$SSH_URL"
+
+    if [[ "$REMOTE_URL" =~ ^https://([^@]+@)?github\.com[:/](.*)/(.*)\.git$ ]]; then
+        USER=${BASH_REMATCH[2]}
+        REPO=${BASH_REMATCH[3]}
+        SSH_URL="git@github.com:$USER/$REPO.git"
+        echo "Fixing remote: $REMOTE_URL → $SSH_URL"
+        git remote set-url origin "$SSH_URL"
     fi
 
     # Stage and commit changes if needed
