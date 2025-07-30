@@ -1,6 +1,7 @@
-# gompertz mortality model simulation and visualization
+# gompertz mortality model simulation and visualization WITH frailty
 
-# This script simulates the Gompertz mortality model for a cohort of 100,000 individuals starting at age 30.
+# This script simulates the Gompertz mortality model for a cohort of 100,000 individuals starting at specified age (70 or 30).
+# It calculates the number of deaths per month based on the Gompertz model parameters and frailty factor.
 # it shows the number of deaths per month as a function of age, and the annual mortality rate on a secondary x-axis.
 
 import matplotlib.pyplot as plt
@@ -19,7 +20,7 @@ k = np.log(1.08)  # 8% annual increase
 max_months = 1200  # 100 years (age 30 to 130)
 
 # Frailty parameter (scalar multiplier)
-frailty = 3  # Set to 1.0 for no frailty, >1 for higher risk, <1 for lower risk
+frailty = 2  # Set to 1.0 for no frailty, >1 for higher risk, <1 for lower risk
 
 # Build ages array for the full simulation period
 ages = [starting_age + t / 12 for t in range(max_months)]
