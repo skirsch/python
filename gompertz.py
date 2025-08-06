@@ -1,3 +1,7 @@
+## gompertz.py
+# Gompertz model for viral spread simulation and visualization
+# this is basic without any frailty or additional parameters
+
 import numpy as np
 import matplotlib.pyplot as plt
 

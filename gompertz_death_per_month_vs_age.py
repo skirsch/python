@@ -7,6 +7,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Frailty parameter (scalar multiplier)
+frailty = 4 # Set to 1.0 for no frailty, >1 for higher risk, <1 for lower risk
+
 # Parameters for Gompertz model
 initial_population = 100000
 starting_age = 70  # Starting age for the cohort
@@ -19,8 +22,7 @@ mu_0_annual = 0.027  # Annual mortality at starting age 70
 k = np.log(1.08)  # 8% annual increase
 max_months = 1200  # 100 years (age 30 to 130)
 
-# Frailty parameter (scalar multiplier)
-frailty = 2  # Set to 1.0 for no frailty, >1 for higher risk, <1 for lower risk
+
 
 # Build ages array for the full simulation period
 ages = [starting_age + t / 12 for t in range(max_months)]
