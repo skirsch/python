@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Frailty parameter (scalar multiplier)
-frailty = 4 # Set to 1.0 for no frailty, >1 for higher risk, <1 for lower risk
+frailty = 5 # Set to 1.0 for no frailty, >1 for higher risk, <1 for lower risk
 
 # Parameters for Gompertz model
 initial_population = 100000
