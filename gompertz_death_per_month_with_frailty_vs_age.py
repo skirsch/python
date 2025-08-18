@@ -11,7 +11,7 @@ import numpy as np
 # # Set to 1.0 for no frailty, >1 for higher risk, <1 for lower risk
 # Example: frailty = 4 means the mortality rate is 4 times higher than the baseline
 # Example: frailty = 0.5 means the mortality rate is half of the baseline (people will live longer)
-frailty = .2 # Set to 1.0 for no frailty, >1 for higher risk, <1 for lower risk
+frailty = 4 # Set to 1.0 for no frailty, >1 for higher risk, <1 for lower risk
 
 # Parameters for Gompertz model
 initial_population = 100000
