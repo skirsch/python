@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# python extract.py --stooq-zip stocks/data.zip --years 10 --output stocks/closes_10y.csv
+# python extract.py --stooq-zip stocks/data.zip --years 17 --output stocks/closes_17y.csv
 
 """
 Extracts daily closing prices for S&P 500 and QQQ constituents from a Stooq ZIP

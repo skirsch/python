@@ -12,15 +12,19 @@ warnings.filterwarnings('ignore')
 # ==========================================
 # CONFIGURATION - Set your analysis period
 # ==========================================
-ANALYSIS_START_DATE = "2020-08-18"  # Start date for the portfolio analysis (YYYY-MM-DD)
+ANALYSIS_START_DATE = "2010-08-18"  # Start date for the portfolio analysis (YYYY-MM-DD)
 ANALYSIS_END_DATE = "2025-08-18"    # End date for the analysis (YYYY-MM-DD)
 
-NUM_TICKERS = 15 # Number of tickers to hold in the portfolio
-NUM_MONTHS_BACK = 12  # Number of months to look back for analysis
+NUM_TICKERS = 10 # Number of tickers to hold in the portfolio
+NUM_MONTHS_BACK = 18  # Number of months to look back for analysis
 REBALANCE_PERIOD = 6  # Number of months between rebalances
 
 INITIAL_INVESTMENT_PER_STOCK = 1000  # Initial investment per stock ($)
 MIN_R_SQUARED = 0 # Minimum R² value for a valid regression, e.g., 0.8 (can make things worse!)
+
+ALGORITHM = "exponential"  # Algorithm to use for screening stocks
+# ALGORITHM = "best return"  # Algorithm to use for screening stocks
+# ALGORITHM= "linear"  # Algorithm to use for screening stocks (terrible results)
 
 # ==========================================
 
@@ -60,12 +64,40 @@ def exponential_regression(x, y):
     except (ValueError, RuntimeError, np.linalg.LinAlgError, OverflowError):
         return None, None, False
 
+def linear_regression(x, y):
+    """
+    Perform simple linear regression: y = a + b * x
+    Returns slope (b), R², and whether fit is valid
+    """
+    try:
+        # Remove any NaN or infinite values
+        valid_mask = np.isfinite(y) & np.isfinite(x)
+        if valid_mask.sum() < 10:  # Need at least 10 points
+            return None, None, False
+            
+        x_valid = x[valid_mask]
+        y_valid = y[valid_mask]
+        
+        # Perform linear regression
+        slope, intercept, r_value, p_value, std_err = stats.linregress(x_valid, y_valid)
+        
+        # Check for valid results
+        if not (np.isfinite(slope) and np.isfinite(r_value)):
+            return None, None, False
+        
+        r_squared = r_value ** 2
+        
+        return slope, r_squared, True
+        
+    except (ValueError, RuntimeError, np.linalg.LinAlgError, OverflowError):
+        return None, None, False
+
 def screen_stocks(df, screen_date, num_months_back, num_tickers):
     """
-    Screen stocks based on exponential regression over the past num_months_back months.
-    Returns list of top tickers by slope.
+    Screen stocks based on selected algorithm over the past num_months_back months.
+    Returns list of top tickers.
     """
-    print(f"[INFO] Starting stock screening for {screen_date.strftime('%Y-%m-%d')}...")
+    print(f"[INFO] Starting stock screening for {screen_date.strftime('%Y-%m-%d')} using '{ALGORITHM}' algorithm...")
     
     # Calculate lookback start date
     lookback_start = screen_date - timedelta(days=num_months_back * 30.44)  # Average days per month
@@ -83,9 +115,6 @@ def screen_stocks(df, screen_date, num_months_back, num_tickers):
     results = []
     
     for i, ticker in enumerate(tickers):
-        if i % 50 == 0 and i > 0:  # Progress every 50 stocks
-            print(f"[INFO] Screened {i}/{len(tickers)} stocks so far...")
-            
         ticker_data = screen_df[screen_df['ticker'] == ticker].copy()
         
         if len(ticker_data) < 50:  # Need sufficient data points
@@ -93,33 +122,80 @@ def screen_stocks(df, screen_date, num_months_back, num_tickers):
             
         # Sort by date and create time series
         ticker_data = ticker_data.sort_values('date')
-        ticker_data['days'] = (ticker_data['date'] - ticker_data['date'].min()).dt.days
         
-        x = ticker_data['days'].values
-        y = ticker_data['close'].values
-        
-        # Perform exponential regression
-        slope, r_squared, is_valid = exponential_regression(x, y)
-        
-        if is_valid and slope is not None and r_squared is not None and r_squared >= MIN_R_SQUARED:
-            # Convert slope to annualized growth rate
-            annual_slope = slope * 365
+        if ALGORITHM == "best return":
+            # Calculate simple percentage return from start to end of period
+            start_price = ticker_data['close'].iloc[0]
+            end_price = ticker_data['close'].iloc[-1]
             
-            results.append({
-                'ticker': ticker,
-                'slope': annual_slope,
-                'r_squared': r_squared,
-                'data_points': len(ticker_data)
-            })
+            if start_price > 0:  # Avoid division by zero
+                pct_return = (end_price - start_price) / start_price * 100
+                
+                results.append({
+                    'ticker': ticker,
+                    'return': pct_return,
+                    'start_price': start_price,
+                    'end_price': end_price,
+                    'data_points': len(ticker_data)
+                })
+        
+        elif ALGORITHM == "exponential":
+            # Use exponential regression (original method)
+            ticker_data['days'] = (ticker_data['date'] - ticker_data['date'].min()).dt.days
+            
+            x = ticker_data['days'].values
+            y = ticker_data['close'].values
+            
+            # Perform exponential regression
+            slope, r_squared, is_valid = exponential_regression(x, y)
+            
+            if is_valid and slope is not None and r_squared is not None and r_squared >= MIN_R_SQUARED:
+                # Convert slope to annualized growth rate
+                annual_slope = slope * 365
+                
+                results.append({
+                    'ticker': ticker,
+                    'slope': annual_slope,
+                    'r_squared': r_squared,
+                    'data_points': len(ticker_data)
+                })
+        
+        elif ALGORITHM == "linear":
+            # Use linear regression
+            ticker_data['days'] = (ticker_data['date'] - ticker_data['date'].min()).dt.days
+            
+            x = ticker_data['days'].values
+            y = ticker_data['close'].values
+            
+            # Perform linear regression
+            slope, r_squared, is_valid = linear_regression(x, y)
+            
+            if is_valid and slope is not None and r_squared is not None and r_squared >= MIN_R_SQUARED:
+                # Convert slope to annualized growth rate (slope is price change per day)
+                annual_slope = slope * 365
+                
+                results.append({
+                    'ticker': ticker,
+                    'slope': annual_slope,
+                    'r_squared': r_squared,
+                    'data_points': len(ticker_data)
+                })
     
-    # Sort by slope and return top tickers
+    # Sort results based on algorithm
     results_df = pd.DataFrame(results)
     if results_df.empty:
-        print(f"[WARN] No valid results from screening! (R² >= {MIN_R_SQUARED:.2f} required)")
+        if ALGORITHM in ["exponential", "linear"]:
+            print(f"[WARN] No valid results from screening! (R² >= {MIN_R_SQUARED:.2f} required)")
+        else:
+            print(f"[WARN] No valid results from screening!")
         return []
     
-    top_stocks = results_df.nlargest(num_tickers, 'slope')
-    print(f"[INFO] Screening complete. Selected {len(top_stocks)} stocks from {len(results)} valid candidates (R² >= {MIN_R_SQUARED:.2f}).")
+    if ALGORITHM == "best return":
+        top_stocks = results_df.nlargest(num_tickers, 'return')
+        print(f"[INFO] Screening complete. Selected {len(top_stocks)} stocks from {len(results)} candidates based on highest returns.")
+    else:  # exponential or linear
+        top_stocks = results_df.nlargest(num_tickers, 'slope')
+        print(f"[INFO] Screening complete. Selected {len(top_stocks)} stocks from {len(results)} valid candidates (R² >= {MIN_R_SQUARED:.2f}).")
     
     return top_stocks['ticker'].tolist()
 
@@ -246,7 +322,7 @@ def calculate_portfolio_performance(df, start_date, end_date, num_tickers, num_m
         # Show progress every 30 days to indicate it's working
         if len(portfolio_history) % 30 == 0 and len(portfolio_history) > 0:
             progress_pct = (i + 1) / len(all_dates) * 100
-            print(f"[INFO] Processing date: {date.strftime('%Y-%m-%d')} - {len(portfolio_history)} days completed ({progress_pct:.1f}%)")
+            # print(f"[INFO] Processing date: {date.strftime('%Y-%m-%d')} - {len(portfolio_history)} days completed ({progress_pct:.1f}%)")
         
         # Debug: Show progress every 5 days for the first 50 days to identify bottleneck
         if len(portfolio_history) < 50 and len(portfolio_history) % 5 == 0:
@@ -254,16 +330,32 @@ def calculate_portfolio_performance(df, start_date, end_date, num_tickers, num_m
         
         # Calculate daily portfolio value
         portfolio_value = cash
-        valid_holdings = {}
         
         for ticker, shares in current_holdings.items():
             current_price = price_lookup.get((ticker, date))
             if current_price is not None:
                 portfolio_value += shares * current_price
-                valid_holdings[ticker] = shares
-        
-        # Update holdings to only include valid tickers
-        current_holdings = valid_holdings
+            else:
+                # Use last known price if current price is unavailable
+                # Look back up to 30 days for the most recent price
+                price_found = None
+                days_back = 0
+                for lookback_days in range(1, 31):
+                    lookback_date = date - timedelta(days=lookback_days)
+                    price_found = price_lookup.get((ticker, lookback_date))
+                    if price_found is not None:
+                        days_back = lookback_days
+                        break
+                
+                if price_found is not None:
+                    portfolio_value += shares * price_found
+                    if len(portfolio_history) < 50:  # Debug for first 50 days
+                        print(f"[DEBUG] Using {days_back}-day old price ${price_found:.2f} for {ticker}")
+                else:
+                    # If no price found in last 30 days, assume stock is worthless
+                    # (this handles delisted stocks)
+                    if len(portfolio_history) < 50:  # Debug for first 50 days
+                        print(f"[DEBUG] No price data found for {ticker} in last 30 days - assuming worthless")
         
         # Debug: Show completion of portfolio value calculation
         if len(portfolio_history) < 50 and len(portfolio_history) % 5 == 0:
@@ -326,6 +418,7 @@ def analyze_performance(portfolio_df):
     print(f"Rebalancing Period:      {REBALANCE_PERIOD} months")
     print(f"Initial Investment:      ${INITIAL_INVESTMENT_PER_STOCK:,.0f} per stock")
     print(f"Minimum R²:              {MIN_R_SQUARED:.2f}")
+    print(f"Algorithm:               {ALGORITHM}")
     
     # Print performance summary
     print(f"\n{'='*60}")
@@ -410,7 +503,7 @@ def main():
     """
     # Load data
     print("[INFO] Loading stock data...")
-    df = pd.read_csv('stocks/closes_10y.csv')
+    df = pd.read_csv('stocks/closes_17y.csv')
     df['date'] = pd.to_datetime(df['date'])
     
     # Convert configuration dates
