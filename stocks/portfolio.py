@@ -9,6 +9,16 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings('ignore')
 
+# Try to import openpyxl for Excel export, install if missing
+try:
+    import openpyxl
+except ImportError:
+    print("[INFO] Installing openpyxl for Excel export...")
+    import subprocess
+    import sys
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "openpyxl"])
+    import openpyxl
+
 # ==========================================
 # CONFIGURATION - Set your analysis period
 # ==========================================
@@ -23,6 +33,10 @@ INITIAL_INVESTMENT_PER_STOCK = 1000  # Initial investment per stock ($)
 MIN_R_SQUARED = 0 # Minimum R² value for a valid regression, e.g., 0.8 (can make things worse!)
 
 ALGORITHM = "exponential"  # Algorithm to use for screening stocks
+
+MONTHS_BETWEEN_ENTRIES=1  # Months between each instance of the portfolio 
+NUM_OF_ENTRIES=6  # Number of times to enter the portfolio
+
 # ALGORITHM = "best return"  # Algorithm to use for screening stocks
 # ALGORITHM= "linear"  # Algorithm to use for screening stocks (terrible results)
 
@@ -227,10 +241,10 @@ def get_rebalance_dates(start_date, end_date, rebalance_period_months):
     
     return dates
 
-def calculate_portfolio_performance(df, start_date, end_date, num_tickers, num_months_back, 
-                                  rebalance_period, initial_investment_per_stock):
+def calculate_single_portfolio_performance(df, start_date, end_date, num_tickers, num_months_back, 
+                                         rebalance_period, initial_investment_per_stock, price_lookup, portfolio_id=0):
     """
-    Calculate portfolio performance with periodic rebalancing.
+    Calculate performance for a single portfolio instance.
     """
     # Get rebalance dates
     rebalance_dates = get_rebalance_dates(start_date, end_date, rebalance_period)
@@ -239,26 +253,16 @@ def calculate_portfolio_performance(df, start_date, end_date, num_tickers, num_m
     portfolio_history = []
     current_holdings = {}  # {ticker: shares}
     cash = 0
+    trades_log = []  # Track all buy/sell transactions
     
-    print(f"[INFO] Portfolio simulation from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}")
-    print(f"[INFO] Rebalancing every {rebalance_period} months on {len(rebalance_dates)} dates")
+    print(f"[INFO] Portfolio {portfolio_id+1} simulation from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}")
     
     # Get all trading dates in the analysis period
     analysis_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)].copy()
     all_dates = sorted(analysis_df['date'].unique())
     
-    # PRE-INDEX DATA FOR FAST LOOKUPS - This should dramatically speed up performance
-    print(f"[INFO] Pre-indexing price data for fast lookups...")
-    price_lookup = {}
-    for _, row in analysis_df.iterrows():
-        key = (row['ticker'], row['date'])
-        price_lookup[key] = row['close']
-    print(f"[INFO] Indexed {len(price_lookup)} price data points")
-    
     current_portfolio_tickers = []
     last_rebalance_date = None
-    
-    print(f"[INFO] Processing {len(all_dates)} trading days...")
     
     for i, date in enumerate(all_dates):
         # Check if this is a rebalance date - only rebalance at specific intervals
@@ -276,14 +280,14 @@ def calculate_portfolio_performance(df, start_date, end_date, num_tickers, num_m
                         break
         
         if should_rebalance:
-            print(f"[INFO] Rebalancing on {date.strftime('%Y-%m-%d')}")
+            print(f"[INFO] Portfolio {portfolio_id+1} rebalancing on {date.strftime('%Y-%m-%d')}")
             last_rebalance_date = date
             
             # Screen for new portfolio
             new_tickers = screen_stocks(df, date, num_months_back, num_tickers)
             
             if not new_tickers:
-                print(f"[WARN] No stocks screened on {date.strftime('%Y-%m-%d')}, keeping current portfolio")
+                print(f"[WARN] Portfolio {portfolio_id+1}: No stocks screened on {date.strftime('%Y-%m-%d')}, keeping current portfolio")
             else:
                 # Calculate current portfolio value
                 current_value = cash
@@ -296,7 +300,19 @@ def calculate_portfolio_performance(df, start_date, end_date, num_tickers, num_m
                 for ticker, shares in current_holdings.items():
                     current_price = price_lookup.get((ticker, date))
                     if current_price is not None:
-                        cash += shares * current_price
+                        sell_amount = shares * current_price
+                        cash += sell_amount
+                        
+                        # Log the sell transaction
+                        trades_log.append({
+                            'portfolio_id': portfolio_id + 1,
+                            'date': date,
+                            'ticker': ticker,
+                            'action': 'SELL',
+                            'quantity': shares,
+                            'price': current_price,
+                            'dollar_amount': sell_amount
+                        })
                 
                 current_holdings = {}
                 
@@ -314,19 +330,22 @@ def calculate_portfolio_performance(df, start_date, end_date, num_tickers, num_m
                     if current_price is not None:
                         shares = dollars_per_stock / current_price
                         current_holdings[ticker] = shares
-                        cash -= shares * current_price
+                        buy_amount = shares * current_price
+                        cash -= buy_amount
+                        
+                        # Log the buy transaction
+                        trades_log.append({
+                            'portfolio_id': portfolio_id + 1,
+                            'date': date,
+                            'ticker': ticker,
+                            'action': 'BUY',
+                            'quantity': shares,
+                            'price': current_price,
+                            'dollar_amount': buy_amount
+                        })
                 
                 current_portfolio_tickers = new_tickers
-                print(f"[INFO] New portfolio: {len(new_tickers)} stocks, value: ${current_value:,.2f}")
-        
-        # Show progress every 30 days to indicate it's working
-        if len(portfolio_history) % 30 == 0 and len(portfolio_history) > 0:
-            progress_pct = (i + 1) / len(all_dates) * 100
-            # print(f"[INFO] Processing date: {date.strftime('%Y-%m-%d')} - {len(portfolio_history)} days completed ({progress_pct:.1f}%)")
-        
-        # Debug: Show progress every 5 days for the first 50 days to identify bottleneck
-        if len(portfolio_history) < 50 and len(portfolio_history) % 5 == 0:
-            print(f"[DEBUG] Day {len(portfolio_history)}: {date.strftime('%Y-%m-%d')} - about to calculate portfolio value")
+                print(f"[INFO] Portfolio {portfolio_id+1}: {len(new_tickers)} stocks, value: ${current_value:,.2f}")
         
         # Calculate daily portfolio value
         portfolio_value = cash
@@ -349,26 +368,125 @@ def calculate_portfolio_performance(df, start_date, end_date, num_tickers, num_m
                 
                 if price_found is not None:
                     portfolio_value += shares * price_found
-                    if len(portfolio_history) < 50:  # Debug for first 50 days
-                        print(f"[DEBUG] Using {days_back}-day old price ${price_found:.2f} for {ticker}")
                 else:
                     # If no price found in last 30 days, assume stock is worthless
-                    # (this handles delisted stocks)
-                    if len(portfolio_history) < 50:  # Debug for first 50 days
-                        print(f"[DEBUG] No price data found for {ticker} in last 30 days - assuming worthless")
-        
-        # Debug: Show completion of portfolio value calculation
-        if len(portfolio_history) < 50 and len(portfolio_history) % 5 == 0:
-            print(f"[DEBUG] Day {len(portfolio_history)}: Portfolio value calculated: ${portfolio_value:,.2f}")
+                    pass  # Don't add to portfolio value
         
         portfolio_history.append({
             'date': date,
             'portfolio_value': portfolio_value,
             'num_holdings': len(current_holdings),
-            'cash': cash
+            'cash': cash,
+            'portfolio_id': portfolio_id
         })
     
-    return pd.DataFrame(portfolio_history)
+    return pd.DataFrame(portfolio_history), trades_log
+
+def calculate_portfolio_performance(df, start_date, end_date, num_tickers, num_months_back, 
+                                  rebalance_period, initial_investment_per_stock):
+    """
+    Calculate portfolio performance with multiple parallel portfolios for smoother returns.
+    """
+    print(f"[INFO] Running {NUM_OF_ENTRIES} parallel portfolios with {MONTHS_BETWEEN_ENTRIES} month offsets")
+    
+    # Get all trading dates in the analysis period
+    analysis_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)].copy()
+    all_dates = sorted(analysis_df['date'].unique())
+    
+    # PRE-INDEX DATA FOR FAST LOOKUPS
+    print(f"[INFO] Pre-indexing price data for fast lookups...")
+    price_lookup = {}
+    for _, row in analysis_df.iterrows():
+        key = (row['ticker'], row['date'])
+        price_lookup[key] = row['close']
+    print(f"[INFO] Indexed {len(price_lookup)} price data points")
+    
+    # Create start dates for each portfolio (offset by MONTHS_BETWEEN_ENTRIES)
+    portfolio_start_dates = []
+    for i in range(NUM_OF_ENTRIES):
+        offset_months = i * MONTHS_BETWEEN_ENTRIES
+        portfolio_start = start_date
+        
+        # Add months to start date
+        new_month = portfolio_start.month + offset_months
+        new_year = portfolio_start.year
+        
+        while new_month > 12:
+            new_month -= 12
+            new_year += 1
+            
+        try:
+            portfolio_start = portfolio_start.replace(year=new_year, month=new_month)
+        except ValueError:  # Handle end of month edge cases
+            portfolio_start = portfolio_start.replace(year=new_year, month=new_month, day=1)
+        
+        portfolio_start_dates.append(portfolio_start)
+    
+    print(f"[INFO] Portfolio start dates:")
+    for i, start_dt in enumerate(portfolio_start_dates):
+        print(f"  Portfolio {i+1}: {start_dt.strftime('%Y-%m-%d')}")
+    
+    # Run each portfolio and collect results
+    all_portfolio_results = []
+    all_trades = []  # Collect all trades from all portfolios
+    
+    for i in range(NUM_OF_ENTRIES):
+        portfolio_start = portfolio_start_dates[i]
+        if portfolio_start <= end_date:  # Only run if start date is before end date
+            print(f"\n[INFO] Starting Portfolio {i+1} from {portfolio_start.strftime('%Y-%m-%d')}")
+            portfolio_df, trades_log = calculate_single_portfolio_performance(
+                df, portfolio_start, end_date, num_tickers, num_months_back,
+                rebalance_period, initial_investment_per_stock, price_lookup, i
+            )
+            if not portfolio_df.empty:
+                all_portfolio_results.append(portfolio_df)
+                all_trades.extend(trades_log)  # Add trades from this portfolio
+    
+    if not all_portfolio_results:
+        print("[ERROR] No portfolio data generated!")
+        return pd.DataFrame(), []
+    
+    # Combine all portfolio results into a single aggregated portfolio
+    print(f"\n[INFO] Combining results from {len(all_portfolio_results)} portfolios...")
+    
+    # Get all unique dates across all portfolios
+    all_unique_dates = set()
+    for portfolio_df in all_portfolio_results:
+        all_unique_dates.update(portfolio_df['date'])
+    all_unique_dates = sorted(list(all_unique_dates))
+    
+    # Create combined portfolio history
+    combined_history = []
+    
+    for date in all_unique_dates:
+        total_value = 0
+        total_holdings = 0
+        total_cash = 0
+        active_portfolios = 0
+        
+        # Sum values from all active portfolios on this date
+        for portfolio_df in all_portfolio_results:
+            portfolio_data = portfolio_df[portfolio_df['date'] == date]
+            if not portfolio_data.empty:
+                row = portfolio_data.iloc[0]
+                total_value += row['portfolio_value']
+                total_holdings += row['num_holdings']
+                total_cash += row['cash']
+                active_portfolios += 1
+        
+        if active_portfolios > 0:
+            combined_history.append({
+                'date': date,
+                'portfolio_value': total_value,
+                'num_holdings': total_holdings,
+                'cash': total_cash,
+                'active_portfolios': active_portfolios
+            })
+    
+    combined_df = pd.DataFrame(combined_history)
+    print(f"[INFO] Combined portfolio spans {len(combined_df)} trading days with up to {NUM_OF_ENTRIES} active portfolios")
+    
+    return combined_df, all_trades
 
 def analyze_performance(portfolio_df):
     """
@@ -377,9 +495,15 @@ def analyze_performance(portfolio_df):
     if portfolio_df.empty:
         return
     
+    # Calculate the actual total initial investment (accounts for parallel portfolios)
+    actual_initial_investment = NUM_OF_ENTRIES * NUM_TICKERS * INITIAL_INVESTMENT_PER_STOCK
+    
     # Calculate returns
     portfolio_df['daily_return'] = portfolio_df['portfolio_value'].pct_change().fillna(0)
-    portfolio_df['cumulative_return'] = (portfolio_df['portfolio_value'] / portfolio_df['portfolio_value'].iloc[0] - 1) * 100
+    
+    # Adjust initial value for proper return calculation
+    first_portfolio_value = portfolio_df['portfolio_value'].iloc[0]
+    portfolio_df['cumulative_return'] = (portfolio_df['portfolio_value'] / actual_initial_investment - 1) * 100
     
     # Calculate drawdown
     rolling_max = portfolio_df['portfolio_value'].expanding().max()
@@ -393,8 +517,8 @@ def analyze_performance(portfolio_df):
     portfolio_df['year'] = portfolio_df['date'].dt.year
     annual_returns = portfolio_df.groupby('year')['daily_return'].apply(lambda x: (1 + x).prod() - 1) * 100
     
-    # Performance statistics
-    initial_value = portfolio_df['portfolio_value'].iloc[0]
+    # Performance statistics - use actual initial investment
+    initial_value = actual_initial_investment  # Corrected initial value
     final_value = portfolio_df['portfolio_value'].iloc[-1]
     total_return = (final_value / initial_value - 1) * 100
     
@@ -413,12 +537,15 @@ def analyze_performance(portfolio_df):
     print("CONFIGURATION PARAMETERS")
     print(f"{'='*60}")
     print(f"Analysis Period:         {ANALYSIS_START_DATE} to {ANALYSIS_END_DATE}")
-    print(f"Portfolio Size:          {NUM_TICKERS} stocks")
+    print(f"Portfolio Size:          {NUM_TICKERS} stocks per portfolio")
     print(f"Screening Lookback:      {NUM_MONTHS_BACK} months")
     print(f"Rebalancing Period:      {REBALANCE_PERIOD} months")
     print(f"Initial Investment:      ${INITIAL_INVESTMENT_PER_STOCK:,.0f} per stock")
     print(f"Minimum R²:              {MIN_R_SQUARED:.2f}")
     print(f"Algorithm:               {ALGORITHM}")
+    print(f"Parallel Portfolios:     {NUM_OF_ENTRIES}")
+    print(f"Entry Offset:            {MONTHS_BETWEEN_ENTRIES} month(s)")
+    print(f"Total Investment:        ${actual_initial_investment:,.0f}")
     
     # Print performance summary
     print(f"\n{'='*60}")
@@ -517,7 +644,7 @@ def main():
     print(f"[INFO] Initial investment: ${INITIAL_INVESTMENT_PER_STOCK:,.0f} per stock")
     
     # Calculate portfolio performance
-    portfolio_df = calculate_portfolio_performance(
+    portfolio_df, all_trades = calculate_portfolio_performance(
         df, start_date, end_date, NUM_TICKERS, NUM_MONTHS_BACK, 
         REBALANCE_PERIOD, INITIAL_INVESTMENT_PER_STOCK
     )
@@ -533,6 +660,42 @@ def main():
     output_file = 'stocks/portfolio_results.csv'
     portfolio_df.to_csv(output_file, index=False)
     print(f"\n[INFO] Portfolio results saved to: {output_file}")
+    
+    # Save trades to Excel file
+    if all_trades:
+        trades_df = pd.DataFrame(all_trades)
+        trades_df = trades_df.sort_values(['date', 'portfolio_id', 'ticker'])
+        
+        # Format the trades DataFrame for better readability
+        trades_df['date'] = trades_df['date'].dt.strftime('%Y-%m-%d')
+        trades_df['quantity'] = trades_df['quantity'].round(4)
+        trades_df['price'] = trades_df['price'].round(2)
+        trades_df['dollar_amount'] = trades_df['dollar_amount'].round(2)
+        
+        # Rename columns for Excel
+        trades_df = trades_df.rename(columns={
+            'portfolio_id': 'Portfolio',
+            'date': 'Date',
+            'ticker': 'Ticker',
+            'action': 'Action',
+            'quantity': 'Quantity',
+            'price': 'Price',
+            'dollar_amount': 'Dollar_Amount'
+        })
+        
+        trades_file = 'stocks/trades.xlsx'
+        trades_df.to_excel(trades_file, index=False, sheet_name='All_Trades')
+        print(f"[INFO] Trades log saved to: {trades_file}")
+        print(f"[INFO] Total transactions recorded: {len(trades_df)}")
+        
+        # Print some trade statistics
+        buy_trades = trades_df[trades_df['Action'] == 'BUY']
+        sell_trades = trades_df[trades_df['Action'] == 'SELL']
+        
+        print(f"[INFO] Buy transactions: {len(buy_trades)}")
+        print(f"[INFO] Sell transactions: {len(sell_trades)}")
+        print(f"[INFO] Total buy amount: ${buy_trades['Dollar_Amount'].sum():,.2f}")
+        print(f"[INFO] Total sell amount: ${sell_trades['Dollar_Amount'].sum():,.2f}")
     
     # Create visualizations
     create_visualizations(portfolio_df, monthly_returns)
