@@ -38,8 +38,7 @@ find . -maxdepth 1 -mindepth 1 -type d -print0 | while IFS= read -r -d '' dir; d
   fi
 
   # Stage and commit if needed
-  # First, normalize line endings according to .gitattributes
-  git add --renormalize .
+  # Add all changes including deletions
   git add -A
 
   if ! git diff --cached --quiet; then
