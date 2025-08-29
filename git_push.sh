@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Check if commit message is provided
+if [ $# -eq 0 ]; then
+    echo "Error: Please provide a commit message in quotes"
+    echo "Usage: $0 \"Your commit message\""
+    exit 1
+fi
+
 PARENT_DIR="/home/stk/GitHub"
-COMMIT_MSG="Auto commit and push all modified files"
+COMMIT_MSG="$1"
 
 cd "$PARENT_DIR"
 
