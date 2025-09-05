@@ -21,3 +21,5 @@ for dir in */; do
     echo ""
   fi
 done
+
+echo "Script completed at: $(date)"

@@ -79,5 +79,6 @@ find . -maxdepth 1 -mindepth 1 -type d -print0 | while IFS= read -r -d '' dir; d
 done
 # If we reach here, all repositories have been processed
 echo "=== All repositories processed successfully ==="  
+echo "Script completed at: $(date)"
 # Ensure the script exits with a success status
 exit 0  
